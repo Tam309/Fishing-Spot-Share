@@ -1,0 +1,87 @@
+/* Fullscreen Container */
+.login-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: #f3f4f6; /* bg-gray-100 */
+  }
+  
+  /* Login Box */
+  .login-box {
+    background-color: white;
+    padding: 32px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  /* Heading */
+  .login-box h2 {
+    font-size: 1.5rem; /* text-2xl */
+    font-weight: bold;
+    margin-bottom: 24px;
+    text-align: center;
+  }
+  
+  /* Error Message */
+  .error-message {
+    color: #ef4444; /* text-red-500 */
+    margin-bottom: 16px;
+  }
+  
+  /* Input Field */
+  .input-group {
+    margin-bottom: 16px;
+  }
+  
+  .input-group label {
+    display: block;
+    color: #374151; /* text-gray-700 */
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  
+  .input-group input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #d1d5db; /* border-gray-300 */
+    border-radius: 8px;
+    outline: none;
+  }
+  
+  .input-group input:focus {
+    border-color: #2563eb; /* focus:ring-blue-600 */
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.5); /* Focus ring */
+  }
+  
+  /* Submit Button */
+  .submit-btn {
+    width: 100%;
+    background-color: #2563eb; /* bg-blue-600 */
+    color: white;
+    padding: 8px 16px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .submit-btn:hover {
+    background-color: #1d4ed8; /* hover:bg-blue-700 */
+  }
+  
+  /* Register Button */
+  .register-btn {
+    width: 100%;
+    background-color: #2563eb; /* bg-blue-600 */
+    color: white;
+    padding: 8px 16px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+    margin-top: 16px;
+  }
+  
+  .register-btn:hover {
+    background-color: #1d4ed8; /* hover:bg-blue-700 */
+  }
+  

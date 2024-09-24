@@ -1,6 +1,6 @@
-// src/components/SharedSpotsPage.tsx
 import React from 'react';
 import { FaUser, FaFish, FaComments } from "react-icons/fa";
+import './SharedSpotsPage.css'; // Import the CSS file
 
 interface SharedSpot {
   id: number;
@@ -43,44 +43,38 @@ const SharedSpotsPage: React.FC = () => {
   ];
 
   const handleDiscuss = (id: number) => {
-    // Handle discuss action, e.g., navigate to discussion page or open modal
     console.log(`Discuss spot with ID: ${id}`);
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <h2 className="text-3xl font-bold mb-6">Recently Shared Fishing Spots</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="shared-container">
+      <h2 className="shared-title">Recently Shared Fishing Spots</h2>
+      <div className="shared-grid">
         {sharedSpots.map((spot) => (
-          <div
-            key={spot.id}
-            className="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105"
-          >
+          <div key={spot.id} className="shared-card">
             <img
               src={spot.image}
               alt={spot.name}
-              className="w-full h-48 object-cover"
+              className="shared-image"
             />
-            <div className="p-4">
-              <h3 className="text-xl font-semibold mb-2">{spot.name}</h3>
-              <p className="text-gray-600 mb-4">{spot.description}</p>
-              {/* Shared By and Date */}
-              <div className="flex justify-between items-center text-sm text-gray-500">
-                <span className="flex items-center">
-                  <FaUser className="mr-1" /> {spot.sharedBy}
+            <div className="shared-content">
+              <h3 className="shared-spot-name">{spot.name}</h3>
+              <p className="shared-description">{spot.description}</p>
+              <div className="shared-footer">
+                <span className="shared-footer-icon">
+                  <FaUser /> {spot.sharedBy}
                 </span>
                 <span>{spot.date}</span>
               </div>
-              {/* Discuss Button and Fish Species */}
               <div className="mt-4 flex justify-between items-center">
                 <button
                   onClick={() => handleDiscuss(spot.id)}
-                  className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-300 flex items-center"
+                  className="shared-discuss-btn"
                 >
-                  <FaComments className="mr-2" /> Discuss
+                  <FaComments /> Discuss
                 </button>
-                <span className="text-sm text-gray-500 flex items-center">
-                  <FaFish className="mr-1" /> Carp, Bass
+                <span className="shared-fish">
+                  <FaFish /> Carp, Bass
                 </span>
               </div>
             </div>

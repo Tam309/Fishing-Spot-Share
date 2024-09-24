@@ -2,13 +2,13 @@
 import React, { useState } from "react";
 import { FaSearch, FaUpload, FaUser, FaMapMarkerAlt, FaFish, FaComments } from "react-icons/fa";
 import { BiMenu } from "react-icons/bi";
-import HomePage from "./HomePage";
-import ExploreSpotsPage from "./ExploreSpotsPage";
-import UploadSpotPage from "./UploadSpotPage";
-import MySpotsPage from "./MySpotsPage";
-import ProfilePage from "./ProfilePage";
-import SharedSpotsPage from "./SharedSpotsPage";
-import LoginPage from "./LoginPage";
+import HomePage from "./HomePage/HomePage";
+import ExploreSpotsPage from "./ExploreSpot/ExploreSpotsPage";
+import UploadSpotPage from "./UploadSpot/UploadSpotPage";
+import MySpotsPage from "./MySpot/MySpotsPage";
+import ProfilePage from "./Profile/ProfilePage";
+import SharedSpotsPage from "./SharedSpot/SharedSpotsPage";
+import LoginPage from "./Login/LoginPage";
 
 const FishingSpotWebsite: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<string>("home");

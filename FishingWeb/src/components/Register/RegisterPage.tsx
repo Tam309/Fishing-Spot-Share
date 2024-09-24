@@ -1,6 +1,6 @@
-// src/components/RegisterPage.tsx
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import './RegisterPage.css'; // Import the CSS file
 
 interface RegisterPageProps {
   onRegister: (username: string) => void;
@@ -16,14 +16,21 @@ const RegisterPage: React.FC<RegisterPageProps> = ({ onRegister }) => {
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    
+    e.preventDefault();
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+    // Simulate successful registration
+    onRegister(username);
+    navigate('/profile');
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-6 text-center">Register for FishSpot</h2>
-        {error && <p className="text-red-500 mb-4">{error}</p>}
+    <div className="register-container">
+      <div className="register-card">
+        <h2 className="register-title">Register for FishSpot</h2>
+        {error && <p className="register-error">{error}</p>}
         <form onSubmit={handleSubmit}>
           {/* Username Field */}
           <div className="mb-4">
@@ -35,7 +42,7 @@ const RegisterPage: React.FC<RegisterPageProps> = ({ onRegister }) => {
               id="username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+              className="register-input"
               placeholder="Enter your username"
               required
             />
@@ -50,7 +57,7 @@ const RegisterPage: React.FC<RegisterPageProps> = ({ onRegister }) => {
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+              className="register-input"
               placeholder="Enter your email"
               required
             />
@@ -65,7 +72,7 @@ const RegisterPage: React.FC<RegisterPageProps> = ({ onRegister }) => {
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+              className="register-input"
               placeholder="Enter your password"
               required
             />
@@ -80,7 +87,7 @@ const RegisterPage: React.FC<RegisterPageProps> = ({ onRegister }) => {
               id="confirmPassword"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+              className="register-input"
               placeholder="Re-enter your password"
               required
             />
@@ -88,15 +95,15 @@ const RegisterPage: React.FC<RegisterPageProps> = ({ onRegister }) => {
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition duration-300"
+            className="register-btn"
           >
             Register
           </button>
         </form>
         {/* Link to Login */}
-        <p className="mt-4 text-center text-gray-600">
+        <p className="register-link">
           Already have an account?{' '}
-          <Link to="/login" className="text-blue-600 hover:underline">
+          <Link to="/login">
             Login here
           </Link>
         </p>

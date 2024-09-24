@@ -1,6 +1,6 @@
-// src/components/UploadSpotPage.tsx
 import React, { ChangeEvent, useState } from 'react';
 import { FaUpload } from "react-icons/fa";
+import './UploadSpotPage.css'; // Import the CSS file
 
 const UploadSpotPage: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -37,14 +37,11 @@ const UploadSpotPage: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <h2 className="text-3xl font-bold mb-6">Upload a New Fishing Spot</h2>
-      <form
-        className="bg-white rounded-lg shadow-md p-6"
-        onSubmit={handleSubmit}
-      >
+    <div className="upload-container">
+      <h2 className="upload-title">Upload a New Fishing Spot</h2>
+      <form className="upload-form" onSubmit={handleSubmit}>
         {/* Spot Name */}
-        <div className="mb-4">
+        <div>
           <label htmlFor="spotName" className="block text-gray-700 font-bold mb-2">
             Spot Name
           </label>
@@ -53,12 +50,12 @@ const UploadSpotPage: React.FC = () => {
             id="spotName"
             value={formData.spotName}
             onChange={handleInputChange}
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+            className="upload-input"
             required
           />
         </div>
         {/* Location */}
-        <div className="mb-4">
+        <div>
           <label htmlFor="location" className="block text-gray-700 font-bold mb-2">
             Location
           </label>
@@ -67,12 +64,12 @@ const UploadSpotPage: React.FC = () => {
             id="location"
             value={formData.location}
             onChange={handleInputChange}
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+            className="upload-input"
             required
           />
         </div>
         {/* Description */}
-        <div className="mb-4">
+        <div>
           <label htmlFor="description" className="block text-gray-700 font-bold mb-2">
             Description
           </label>
@@ -81,12 +78,12 @@ const UploadSpotPage: React.FC = () => {
             value={formData.description}
             onChange={handleInputChange}
             rows={4}
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+            className="upload-textarea"
             required
           ></textarea>
         </div>
         {/* Fish Species */}
-        <div className="mb-4">
+        <div>
           <label htmlFor="fishSpecies" className="block text-gray-700 font-bold mb-2">
             Fish Species
           </label>
@@ -95,23 +92,23 @@ const UploadSpotPage: React.FC = () => {
             id="fishSpecies"
             value={formData.fishSpecies}
             onChange={handleInputChange}
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+            className="upload-input"
             placeholder="e.g., Trout, Bass, Salmon"
           />
         </div>
         {/* Upload Images */}
-        <div className="mb-6">
+        <div>
           <label className="block text-gray-700 font-bold mb-2">Upload Images</label>
-          <div className="border-dashed border-2 border-gray-400 rounded-lg p-4 text-center">
-            <FaUpload className="mx-auto text-gray-400 text-3xl mb-2" />
-            <p className="text-gray-600">
+          <div className="upload-image-area">
+            <FaUpload className="upload-icon" />
+            <p>
               Drag and drop your images here, or click to select files
             </p>
             <input
               type="file"
               multiple
               onChange={handleFileChange}
-              className="hidden"
+              className="hidden-file-input"
               id="uploadImages"
             />
             <label htmlFor="uploadImages" className="cursor-pointer">
@@ -120,10 +117,7 @@ const UploadSpotPage: React.FC = () => {
           </div>
         </div>
         {/* Submit Button */}
-        <button
-          type="submit"
-          className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300"
-        >
+        <button type="submit" className="upload-button">
           Upload Spot
         </button>
       </form>
