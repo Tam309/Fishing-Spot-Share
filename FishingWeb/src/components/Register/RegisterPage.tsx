@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import './RegisterPage.css'; // Import the CSS file
+import axios from 'axios';
 
-interface RegisterPageProps {
-  onRegister: (username: string) => void;
-}
 
-const RegisterPage: React.FC<RegisterPageProps> = ({ onRegister }) => {
+const RegisterPage = () => {
   const [username, setUsername] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -17,13 +15,24 @@ const RegisterPage: React.FC<RegisterPageProps> = ({ onRegister }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    try{
+      const response = await axios.post('http://localhost:3001/register', {
+        user_name: username,
+        email: email,
+        password: password
+    });
+    if(response.status === 200) {
+      console.log(response);
+      navigate('/login');
+    }
+  } catch(error) {
+    console.log(error)
+  }
     if (password !== confirmPassword) {
       setError("Passwords do not match.");
       return;
     }
-    // Simulate successful registration
-    onRegister(username);
-    navigate('/profile');
+    
   };
 
   return (
