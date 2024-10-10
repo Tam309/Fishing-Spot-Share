@@ -6,8 +6,10 @@ const postRouter = express.Router();
 // Create new post
 postRouter.post("/posts/new", async (req, res) => {
     const user_id = parseInt(req.body.user_id);
-    const title = req.body.title;
-    const content = req.body.content;
+    const spot_name = req.body.spot_name;
+    const location = req.body.location;
+    const description = req.body.description;
+    const fish_type = req.body.fish_type;
     const imgUrl = req.body.imgUrl;
     try {
         // Insert photo URL
@@ -16,8 +18,8 @@ postRouter.post("/posts/new", async (req, res) => {
         const photo_id = photoResult.rows[0].photo_id;
 
         // Insert post with the photo_id
-        const postSql = "INSERT INTO posts (user_id, title, post_content, photo_id) VALUES ($1, $2, $3, $4) RETURNING post_id, user_id";
-        const postResult = await query(postSql, [user_id, title, content, photo_id]);
+        const postSql = "INSERT INTO posts (user_id, spot_name, location, description, fish_type, photo_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING post_id, user_id";
+        const postResult = await query(postSql, [user_id, spot_name, location, description, fish_type, photo_id]);
         const rows = postResult.rows;
 
         if (rows.length > 0) {
@@ -64,17 +66,19 @@ postRouter.delete("/posts/:post_id", async (req, res) => {
 // Edit post
 postRouter.put('/posts/:post_id', async (req, res) => {
     const post_id = Number(req.params.post_id);
-    const post_content  = req.body.post_content;
-    const title = req.body.title;
+    const spot_name  = req.body.spot_name;
+    const location = req.body.location;
+    const description = req.body.description;
+    const fish_type = req.body.fish_type;
     try {
         const result = await query(
-        'UPDATE posts SET title =$1, post_content =$2 WHERE post_id =$3 RETURNING *', 
-        [title, post_content, post_id]);
+        'UPDATE posts SET spot_name =$1, location =$2, description = $3, fish_type = $4 WHERE post_id =$5 RETURNING *', 
+        [spot_name, location, description, fish_type, post_id]);
         const rows = result.rows ? result.rows : [];
         res.status(200).json({ 
             post_id: rows[0].post_id, 
-            title: rows[0].title, 
-            post_content: rows[0].post_content,
+            spot_name: rows[0].spot_name, 
+            description: rows[0].description,
             saved: rows[0].saved
           })
     } catch (error) {
