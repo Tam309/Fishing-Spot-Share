@@ -3,17 +3,19 @@ create table users (
     user_name varchar(100) unique not null,
     email varchar(100) unique not null,
     password varchar(255) not null,
-) create table posts (
-    post_id serial primary key,
-    title varchar(100) not null,
-    saved timestamp default current_timestamp,
-    user_id int not null,
-    constraint fk_user foreign key(user_id) references users(user_id),
-    post_content text not null,
-    photo_id int,
-    CONSTRAINT fk_posts FOREIGN KEY (photo_id) REFERENCES photos(photo_id);
-
+) CREATE TABLE posts (
+    post_id SERIAL PRIMARY KEY,
+    spot_name VARCHAR(100) NOT NULL, -- Previously title
+    saved TIMESTAMP DEFAULT current_timestamp,
+    user_id INT NOT NULL,
+    CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(user_id),
+    description TEXT NOT NULL, -- Previously post_content
+    photo_id INT,
+    CONSTRAINT fk_posts FOREIGN KEY (photo_id) REFERENCES photos(photo_id),
+    location VARCHAR(255), -- New column for location
+    fish_type VARCHAR(100) -- New column for fish type
 );
+
 
 create table comments (
     comment_id serial primary key,
