@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './LoginPage.css'; // Import the CSS file
-import RegisterPage from '../Register/RegisterPage';
+import { Link, useNavigate } from 'react-router-dom';
 
 interface LoginPageProps {
   onLogin: (username: string) => void;
@@ -10,6 +10,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [error, setError] = useState<string>('');
+  const navigate = useNavigate(); // Hook to programmatically navigate
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,6 +21,10 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
 
     // Simulate login success
     onLogin(username);
+  };
+
+  const handleRegister = () => {
+    navigate('/register'); // Navigate to the register page
   };
 
   return (
@@ -52,11 +57,12 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
           </div>
           {/* Submit Button */}
           <button type="submit" className="submit-btn">Login</button>
-          {/* Register Link */}
-          <p className="register-link">
-            Don't have an account? <RegisterPage />
-          </p>
         </form>
+        {/* Register Link */}
+        <p className="register-link">
+          Don't have an account?
+        </p>
+        <button onClick={handleRegister} className="register-btn">Register</button>
       </div>
     </div>
   );

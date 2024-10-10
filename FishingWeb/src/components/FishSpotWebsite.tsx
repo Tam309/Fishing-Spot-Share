@@ -1,95 +1,44 @@
-// src/components/FishingSpotWebsite.tsx
 import React, { useState } from "react";
-import { FaSearch, FaUpload, FaUser, FaMapMarkerAlt, FaFish, FaComments } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import { FaUser } from "react-icons/fa";
 import { BiMenu } from "react-icons/bi";
-import HomePage from "./HomePage/HomePage";
-import ExploreSpotsPage from "./ExploreSpot/ExploreSpotsPage";
-import UploadSpotPage from "./UploadSpot/UploadSpotPage";
-import MySpotsPage from "./MySpot/MySpotsPage";
-import ProfilePage from "./Profile/ProfilePage";
-import SharedSpotsPage from "./SharedSpot/SharedSpotsPage";
-import LoginPage from "./Login/LoginPage";
 
 const FishingSpotWebsite: React.FC = () => {
-  const [currentPage, setCurrentPage] = useState<string>("home");
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [username, setUsername] = useState<string>("");
 
-  const handleLogin = (user: string) => {
-    setIsLoggedIn(true);
-    setUsername(user);
-    setCurrentPage("profile");
-    setIsMenuOpen(false);
-  };
-
   const handleLogout = () => {
     setIsLoggedIn(false);
     setUsername("");
-    setCurrentPage("home");
     setIsMenuOpen(false);
   };
 
-  const renderPage = () => {
-    switch (currentPage) {
-      case "home":
-        return <HomePage />;
-      case "explore":
-        return <ExploreSpotsPage />;
-      case "upload":
-        return <UploadSpotPage />;
-      case "mySpots":
-        return <MySpotsPage />;
-      case "profile":
-        return <ProfilePage username={username} onLogout={handleLogout} />;
-      case "sharedSpots":
-        return <SharedSpotsPage />;
-      case "login":
-        return <LoginPage onLogin={handleLogin} />;
-      default:
-        return <HomePage />;
-    }
-  };
-
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-screen bg-gray-100">
       {/* Navigation Bar */}
-      <nav className="bg-blue-600 p-4 text-white">
+      <nav className="bg-blue-600 p-4 text-white fixed w-full top-0 z-50">
         <div className="container mx-auto flex justify-between items-center">
           <h1 className="text-2xl font-bold">FishSpot</h1>
-          {/* Desktop Menu */}
           <div className="hidden md:flex space-x-4">
-            <button onClick={() => setCurrentPage("home")} className="hover:text-blue-200">
-              Home
-            </button>
-            <button onClick={() => setCurrentPage("explore")} className="hover:text-blue-200">
-              Explore Spots
-            </button>
-            <button onClick={() => setCurrentPage("upload")} className="hover:text-blue-200">
-              Upload Spot
-            </button>
-            <button onClick={() => setCurrentPage("mySpots")} className="hover:text-blue-200">
-              My Spots
-            </button>
-            <button onClick={() => setCurrentPage("sharedSpots")} className="hover:text-blue-200">
-              Shared Spots
-            </button>
+            <Link to="/" className="hover:text-blue-200">Home</Link>
+            <Link to="/explore" className="hover:text-blue-200">Explore Spots</Link>
+            <Link to="/upload" className="hover:text-blue-200">Upload Spot</Link>
+            <Link to="/mySpots" className="hover:text-blue-200">My Spots</Link>
+            <Link to="/sharedSpots" className="hover:text-blue-200">Shared Spots</Link>
             {isLoggedIn ? (
               <>
-                <button onClick={() => setCurrentPage("profile")} className="hover:text-blue-200 flex items-center">
+                <Link to="/profile" className="hover:text-blue-200 flex items-center">
                   <FaUser className="mr-1" /> {username}
-                </button>
+                </Link>
                 <button onClick={handleLogout} className="hover:text-blue-200">
                   Logout
                 </button>
               </>
             ) : (
-              <button onClick={() => setCurrentPage("login")} className="hover:text-blue-200">
-                Login
-              </button>
+              <Link to="/login" className="hover:text-blue-200">Login</Link>
             )}
           </div>
-          {/* Mobile Menu Button */}
           <div className="md:hidden">
             <button onClick={() => setIsMenuOpen(!isMenuOpen)}>
               <BiMenu size={24} />
@@ -98,67 +47,38 @@ const FishingSpotWebsite: React.FC = () => {
         </div>
       </nav>
 
-      {/* Mobile Menu */}
-      {isMenuOpen && (
-        <div className="md:hidden bg-blue-500 p-4">
-          <button
-            onClick={() => { setCurrentPage("home"); setIsMenuOpen(false); }}
-            className="block w-full text-left py-2 text-white hover:bg-blue-600"
-          >
-            Home
-          </button>
-          <button
-            onClick={() => { setCurrentPage("explore"); setIsMenuOpen(false); }}
-            className="block w-full text-left py-2 text-white hover:bg-blue-600"
-          >
-            Explore Spots
-          </button>
-          <button
-            onClick={() => { setCurrentPage("upload"); setIsMenuOpen(false); }}
-            className="block w-full text-left py-2 text-white hover:bg-blue-600"
-          >
-            Upload Spot
-          </button>
-          <button
-            onClick={() => { setCurrentPage("mySpots"); setIsMenuOpen(false); }}
-            className="block w-full text-left py-2 text-white hover:bg-blue-600"
-          >
-            My Spots
-          </button>
-          <button
-            onClick={() => { setCurrentPage("sharedSpots"); setIsMenuOpen(false); }}
-            className="block w-full text-left py-2 text-white hover:bg-blue-600"
-          >
-            Shared Spots
-          </button>
-          {isLoggedIn ? (
-            <>
-              <button
-                onClick={() => { setCurrentPage("profile"); setIsMenuOpen(false); }}
-                className="block w-full text-left py-2 text-white hover:bg-blue-600 flex items-center"
-              >
-                <FaUser className="mr-1" /> {username}
-              </button>
-              <button
-                onClick={() => { handleLogout(); }}
-                className="block w-full text-left py-2 text-white hover:bg-blue-600"
-              >
-                Logout
-              </button>
-            </>
-          ) : (
-            <button
-              onClick={() => { setCurrentPage("login"); setIsMenuOpen(false); }}
-              className="block w-full text-left py-2 text-white hover:bg-blue-600"
-            >
-              Login
-            </button>
-          )}
-        </div>
-      )}
+      {/* Content */}
+      <div className="mt-[4rem]">
+        {/* Ensure there's no spacing issue */}
+        {isMenuOpen && (
+          <div className="md:hidden bg-blue-500 p-4">
+            <Link to="/" onClick={() => setIsMenuOpen(false)} className="block w-full text-left py-2 text-white hover:bg-blue-600">Home</Link>
+            <Link to="/explore" onClick={() => setIsMenuOpen(false)} className="block w-full text-left py-2 text-white hover:bg-blue-600">Explore Spots</Link>
+            <Link to="/upload" onClick={() => setIsMenuOpen(false)} className="block w-full text-left py-2 text-white hover:bg-blue-600">Upload Spot</Link>
+            <Link to="/mySpots" onClick={() => setIsMenuOpen(false)} className="block w-full text-left py-2 text-white hover:bg-blue-600">My Spots</Link>
+            <Link to="/sharedSpots" onClick={() => setIsMenuOpen(false)} className="block w-full text-left py-2 text-white hover:bg-blue-600">Shared Spots</Link>
+            {isLoggedIn ? (
+              <>
+                <Link to="/profile" onClick={() => setIsMenuOpen(false)} className="block w-full text-left py-2 text-white hover:bg-blue-600">
+                  <FaUser className="mr-1" /> {username}
+                </Link>
+                <button onClick={() => { handleLogout(); setIsMenuOpen(false); }} className="block w-full text-left py-2 text-white hover:bg-blue-600">
+                  Logout
+                </button>
+              </>
+            ) : (
+              <Link to="/login" onClick={() => setIsMenuOpen(false)} className="block w-full text-left py-2 text-white hover:bg-blue-600">
+                Login
+              </Link>
+            )}
+          </div>
+        )}
 
-      {/* Render Current Page */}
-      {renderPage()}
+        {/* Rest of your content goes here */}
+        <div className="container mx-auto mt-4">
+          {/* Your content like Explore Spots or other components */}
+        </div>
+      </div>
     </div>
   );
 };
