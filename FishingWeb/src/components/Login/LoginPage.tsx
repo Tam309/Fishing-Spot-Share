@@ -1,26 +1,34 @@
 import React, { useState } from 'react';
 import './LoginPage.css'; // Import the CSS file
 import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
-interface LoginPageProps {
-  onLogin: (username: string) => void;
-}
-
-const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
+const LoginPage: React.FC = () => {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [error, setError] = useState<string>('');
   const navigate = useNavigate(); // Hook to programmatically navigate
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    try {
+      const response = await axios.post("http://localhost:3001/login", {
+        user_name: username,
+        password: password
+      });
+      if(response.status === 200) {
+        console.log(response);
+        navigate('/');
+      }
+    } catch (error) {
+      setError('Invalid username or password! Pleas try again');
+      console.log(error)
+    }
+    
     if (username.trim() === '' || password.trim() === '') {
       setError('Please enter both username and password.');
       return;
     }
-
-    // Simulate login success
-    onLogin(username);
   };
 
   const handleRegister = () => {

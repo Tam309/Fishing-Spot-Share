@@ -30,8 +30,8 @@ userRouter.post("/register", async (req, res) => {
 // Login
 userRouter.post("/login", async (req, res) => {
     try{
-        const sql = "select * from users where email = $1";
-        const result = await query(sql, [req.body.email]);
+        const sql = "select * from users where user_name = $1";
+        const result = await query(sql, [req.body.user_name]);
         if (result.rowCount === 1){
             bcrypt.compare(req.body.password, result.rows[0].password, (err, bcrypt_res) => {
                 if(!err){
