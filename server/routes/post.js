@@ -10,16 +10,11 @@ postRouter.post("/posts/new", async (req, res) => {
     const location = req.body.location;
     const description = req.body.description;
     const fish_type = req.body.fish_type;
-    const imgUrl = req.body.imgUrl;
+    const photo_url = req.body.photo_url;
     try {
-        // Insert photo URL
-        const photoSql = "INSERT INTO photos (photo_url) VALUES ($1) RETURNING photo_id";
-        const photoResult = await query(photoSql, [imgUrl]);
-        const photo_id = photoResult.rows[0].photo_id;
 
-        // Insert post with the photo_id
-        const postSql = "INSERT INTO posts (user_id, spot_name, location, description, fish_type, photo_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING post_id, user_id";
-        const postResult = await query(postSql, [user_id, spot_name, location, description, fish_type, photo_id]);
+        const postSql = "INSERT INTO posts (user_id, spot_name, location, description, fish_type, photo_url) VALUES ($1, $2, $3, $4, $5, $6) RETURNING post_id, user_id";
+        const postResult = await query(postSql, [user_id, spot_name, location, description, fish_type, photo_url]);
         const rows = postResult.rows;
 
         if (rows.length > 0) {

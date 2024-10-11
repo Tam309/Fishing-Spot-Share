@@ -9,6 +9,7 @@ import SharedSpotsPage from "./components/SharedSpot/SharedSpotsPage";
 import LoginPage from "./components/Login/LoginPage";
 import FishingSpotWebsite from "./components/FishSpotWebsite";
 import RegisterPage from "./components/Register/RegisterPage";
+import EditPostPage from "./components/MySpot/EditPostPage"
 
 const App: React.FC = () => {
   return (
@@ -21,8 +22,9 @@ const App: React.FC = () => {
         <Route path="/mySpots" element={<MySpotsPage />} />
         <Route path="/profile" element={<ProfilePage username="User" onLogout={() => {}} />} />
         <Route path="/sharedSpots" element={<SharedSpotsPage />} />
-        <Route path="/login" element={<LoginPage onLogin={() => {}} />} />
-        <Route path="/register" element={<RegisterPage onRegister={() => {}} />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/edit/:post_id" element={<EditPostPage />} />
       </Routes>
     </Router>
   );

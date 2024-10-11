@@ -30,7 +30,7 @@ const MySpotsPage: React.FC = () => {
 
   const handleEdit = (post_id: number) => {
     // Navigate to the edit page with the id of the spot to edit
-    navigate("/edit");
+    navigate(`/edit/${post_id}`); // Pass the post_id in the URL
     console.log(`Edit spot with ID: ${post_id}`);
   };
 

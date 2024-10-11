@@ -1,15 +1,41 @@
-import React, { ChangeEvent, useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { ChangeEvent, useState } from "react";
 import { FaUpload } from "react-icons/fa";
-import './UploadSpotPage.css'; // Import the CSS file
+import axios from "axios";
+import { useParams } from "react-router-dom";
+import "./EditPostPage.css"; // Import the CSS file
 
-const UploadSpotPage: React.FC = () => {
-  const user_id = 1;
+const EditPostPage: React.FC = () => {
+  const { post_id } = useParams<{ post_id: string }>();
   const [spot_name, setSpotName] = useState<string>("");
   const [location, setLocation] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [fishSpecies, setFishSpecies] = useState<string>("");
-  const [photo_url, setPhoto_url] = useState<File>();
+  const [images, setImages] = useState<File>(); // Updated to handle multiple files
+
+    const handleSubmit = async (e: React.FormEvent) => {
+      e.preventDefault();
+      // Handle form submission, e.g., send data to backend
+      try {
+        const response = await axios.put(`http://localhost:3001/posts/${post_id}`, {
+          spot_name,
+          location,
+          description,
+          fishSpecies,
+          images,
+        });
+        console.log(response.data);
+      } catch (error) {
+        console.error("There was an error updating the post!", error);
+      }
+      console.log({
+        spot_name,
+        location,
+        description,
+        fishSpecies,
+        images,
+      });
+    };
+
 
   const handleInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -33,38 +59,18 @@ const UploadSpotPage: React.FC = () => {
     }
   };
 
-  const sendPostDataToServer = async () => {
-    try {
-      const response = await axios.post("http://localhost:3001/posts/new" , {
-        user_id,
-        spot_name,
-        location,
-        description,
-        fishSpecies,
-        photo_url,
-      })
-      console.log(response.data);
-    } catch(error) {
-      console.log(error);
-    }
-  }
-  
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-      sendPostDataToServer();
-  };
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {};
 
   return (
     <div className="upload-container">
-      <h2 className="upload-title">Upload a New Fishing Spot</h2>
+      <h2 className="upload-title">Edit Fishing Spot</h2>
       <form className="upload-form" onSubmit={handleSubmit}>
         {/* Spot Name */}
         <div>
-          <label htmlFor="spotName" className="block text-gray-700 font-bold mb-2">
+          <label
+            htmlFor="spotName"
+            className="block text-gray-700 font-bold mb-2"
+          >
             Spot Name
           </label>
           <input
@@ -77,7 +83,10 @@ const UploadSpotPage: React.FC = () => {
         </div>
         {/* Location */}
         <div>
-          <label htmlFor="location" className="block text-gray-700 font-bold mb-2">
+          <label
+            htmlFor="location"
+            className="block text-gray-700 font-bold mb-2"
+          >
             Location
           </label>
           <input
@@ -90,7 +99,10 @@ const UploadSpotPage: React.FC = () => {
         </div>
         {/* Description */}
         <div>
-          <label htmlFor="description" className="block text-gray-700 font-bold mb-2">
+          <label
+            htmlFor="description"
+            className="block text-gray-700 font-bold mb-2"
+          >
             Description
           </label>
           <textarea
@@ -103,7 +115,10 @@ const UploadSpotPage: React.FC = () => {
         </div>
         {/* Fish Species */}
         <div>
-          <label htmlFor="fishSpecies" className="block text-gray-700 font-bold mb-2">
+          <label
+            htmlFor="fishSpecies"
+            className="block text-gray-700 font-bold mb-2"
+          >
             Fish Species
           </label>
           <input
@@ -116,12 +131,12 @@ const UploadSpotPage: React.FC = () => {
         </div>
         {/* Upload Images */}
         <div>
-          <label className="block text-gray-700 font-bold mb-2">Upload Images</label>
+          <label className="block text-gray-700 font-bold mb-2">
+            Upload Images
+          </label>
           <div className="upload-image-area">
             <FaUpload className="upload-icon" />
-            <p>
-              Drag and drop your images here, or click to select files
-            </p>
+            <p>Drag and drop your images here, or click to select files</p>
             <input
               type="file"
               multiple
@@ -135,7 +150,7 @@ const UploadSpotPage: React.FC = () => {
           </div>
         </div>
         {/* Submit Button */}
-        <button type="submit" className="upload-button">
+        <button type="submit" className="upload-button" onClick={handleSubmit}>
           Upload Spot
         </button>
       </form>
@@ -143,4 +158,4 @@ const UploadSpotPage: React.FC = () => {
   );
 };
 
-export default UploadSpotPage;
+export default EditPostPage;
