@@ -9,7 +9,7 @@ const EditPostPage: React.FC = () => {
   const [spot_name, setSpotName] = useState<string>("");
   const [location, setLocation] = useState<string>("");
   const [description, setDescription] = useState<string>("");
-  const [fishSpecies, setFishSpecies] = useState<string>("");
+  const [fish_type, setFishSpecies] = useState<string>("");
   const [images, setImages] = useState<File>(); // Updated to handle multiple files
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -20,7 +20,7 @@ const EditPostPage: React.FC = () => {
           spot_name,
           location,
           description,
-          fishSpecies,
+          fish_type,
           images,
         });
         console.log(response.data);
@@ -31,7 +31,7 @@ const EditPostPage: React.FC = () => {
         spot_name,
         location,
         description,
-        fishSpecies,
+        fish_type,
         images,
       });
     };

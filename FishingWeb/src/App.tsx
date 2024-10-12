@@ -10,6 +10,7 @@ import LoginPage from "./components/Login/LoginPage";
 import FishingSpotWebsite from "./components/FishSpotWebsite";
 import RegisterPage from "./components/Register/RegisterPage";
 import EditPostPage from "./components/MySpot/EditPostPage"
+import SinglePostPage from "./components/SinglePost/SinglePostPage";
 
 const App: React.FC = () => {
   return (
@@ -25,6 +26,7 @@ const App: React.FC = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/edit/:post_id" element={<EditPostPage />} />
+        <Route path="/posts/:post_id" element={<SinglePostPage />} />
       </Routes>
     </Router>
   );

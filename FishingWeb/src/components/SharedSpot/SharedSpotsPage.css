@@ -38,6 +38,7 @@
     overflow: hidden;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* shadow-md */
     transition: transform 0.3s ease;
+    cursor: pointer;
   }
   
   .shared-card:hover {

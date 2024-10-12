@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./MySpotsPage.css"; // Import the CSS file
 
 interface MySpot {
@@ -28,14 +29,29 @@ const MySpotsPage: React.FC = () => {
     fetchPostData();
   }, []);
 
-  const handleEdit = (post_id: number) => {
-    // Navigate to the edit page with the id of the spot to edit
-    navigate(`/edit/${post_id}`); // Pass the post_id in the URL
+  const handleEdit = (post_id: number, e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent the card's click event
+    navigate(`/edit/${post_id}`); // Navigate to the edit page
     console.log(`Edit spot with ID: ${post_id}`);
   };
 
-  const handleDelete = (id: number) => {
+  const handleDelete = async (id: number, e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent the card's click event
+    try {
+      const response = await axios.delete(`http://localhost:3001/posts/${id}`);
+      console.log(response.data);
+      
+      // Update the state to remove the deleted post
+      setMySpots((prevSpots) => prevSpots.filter((spot) => spot.post_id !== id));
+      
+    } catch (error) {
+      console.log(error);
+    }
     console.log(`Delete spot with ID: ${id}`);
+  };
+  
+  const handleSinglePostPage = (post_id: number) => {
+    navigate(`/posts/${post_id}`);
   };
 
   return (
@@ -43,20 +59,24 @@ const MySpotsPage: React.FC = () => {
       <h2 className="my-spots-heading">My Fishing Spots</h2>
       <div className="my-spots-grid">
         {mySpots.map((spot) => (
-          <div key={spot.post_id} className="spot-card">
+          <div 
+            key={spot.post_id} 
+            className="spot-card" 
+            onClick={() => handleSinglePostPage(spot.post_id)}
+          >
             <img src="https://placehold.co/723x964" alt={spot.spot_name} />
             <div className="spot-card-content">
               <h3 className="spot-card-title">{spot.spot_name}</h3>
               <p className="spot-card-description">{spot.description}</p>
               <div className="spot-card-buttons">
                 <button
-                  onClick={() => handleEdit(spot.post_id)}
+                  onClick={(e) => handleEdit(spot.post_id, e)}
                   className="edit-btn"
                 >
                   Edit
                 </button>
                 <button
-                  onClick={() => handleDelete(spot.post_id)}
+                  onClick={(e) => handleDelete(spot.post_id, e)}
                   className="delete-btn"
                 >
                   Delete

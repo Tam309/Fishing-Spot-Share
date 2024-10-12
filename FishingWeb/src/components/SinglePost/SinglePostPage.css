@@ -1,0 +1,81 @@
+.single-post-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+  }
+  
+  .single-post-image {
+    width: 100%;
+    max-width: 800px;
+  }
+  
+  .single-post-main-image {
+    width: 100%;
+    border-radius: 8px;
+    object-fit: cover;
+  }
+  
+  .single-post-content {
+    width: 100%;
+    max-width: 800px;
+    background-color: #fff;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .single-post-title {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .single-post-meta {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    color: #555;
+  }
+  
+  .single-post-meta span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  .single-post-description {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+  
+  .single-post-fish-species {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
+  
+  .single-post-fish-species svg {
+    margin-right: 8px;
+  }
+  
+  .single-post-discuss-btn {
+    background-color: #0066ff;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.2s ease;
+  }
+  
+  .single-post-discuss-btn:hover {
+    background-color: #0044cc;
+  }
+  
