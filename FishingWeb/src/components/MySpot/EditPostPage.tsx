@@ -24,6 +24,7 @@ const EditPostPage: React.FC = () => {
           images,
         });
         console.log(response.data);
+        alert("Update successful");
       } catch (error) {
         console.error("There was an error updating the post!", error);
       }

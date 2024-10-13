@@ -44,6 +44,7 @@ const UploadSpotPage: React.FC = () => {
         photo_url,
       })
       console.log(response.data);
+      alert("Spot uploaded successfully!");
     } catch(error) {
       console.log(error);
     }
