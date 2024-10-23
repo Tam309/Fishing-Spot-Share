@@ -66,6 +66,18 @@ postRouter.delete("/posts/:post_id", async (req, res) => {
     res.status(500).json({ error: error });
   }
 });
+//Get photo_url
+postRouter.get("/posts/photo/:post_id", async(req, res) => {
+  const post_id = Number(req.params.post_id);
+  try {
+    const result = await query("SELECT photo_url FROM posts WHERE post_id = $1", [post_id]);
+    const rows = result.rows ? result.rows : [];
+    res.status(200).json(rows[0]);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: error.message });
+  }
+})
 // Edit post
 postRouter.put("/posts/:post_id", async (req, res) => {
   const post_id = Number(req.params.post_id);
@@ -73,10 +85,11 @@ postRouter.put("/posts/:post_id", async (req, res) => {
   const location = req.body.location;
   const description = req.body.description;
   const fish_type = req.body.fish_type;
+  const photo_url = req.body.photo_url
   try {
     const result = await query(
-      "UPDATE posts SET spot_name =$1, location =$2, description = $3, fish_type = $4 WHERE post_id =$5 RETURNING *",
-      [spot_name, location, description, fish_type, post_id]
+      "UPDATE posts SET spot_name =$1, location =$2, description = $3, fish_type = $4, photo_url = $5 WHERE post_id =$6 RETURNING *",
+      [spot_name, location, description, fish_type, photo_url, post_id]
     );
     const rows = result.rows ? result.rows : [];
     res.status(200).json({

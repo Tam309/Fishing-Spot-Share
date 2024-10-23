@@ -9,7 +9,7 @@ interface MyPost {
   post_id: number;
   spot_name: string;
   description: string;
-//   photo_url: string;
+  photo_url: string;
   user_name: string;
   saved: string;
   fish_type: string;
@@ -19,7 +19,6 @@ const SinglePostPage: React.FC = () => {
   const [myPost, setMyPost] = useState<MyPost | null>(null);
   const { post_id } = useParams<{ post_id: string }>();
 
-    const photo_url = "https://placehold.co/25x10";
 
   const fetchPostData = async () => {
     try {
@@ -47,7 +46,7 @@ const SinglePostPage: React.FC = () => {
     <div className="single-post-container">
       <div className="single-post-image">
         <img
-          src={photo_url}
+          src={myPost.photo_url}
           alt={myPost.spot_name}
           className="single-post-main-image"
         />

@@ -63,7 +63,7 @@ const MySpotsPage: React.FC = () => {
             className="spot-card"
             onClick={() => handleSinglePostPage(spot.post_id)}
           >
-            <img src="https://placehold.co/723x964" alt={spot.spot_name} />
+            <img src={spot.photo_url} alt={spot.spot_name} />
             <div className="spot-card-content">
               <h3 className="spot-card-title">{spot.spot_name}</h3>
               <p className="spot-card-description">{spot.description}</p>

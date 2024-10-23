@@ -1,15 +1,17 @@
-import React, { ChangeEvent, useState, useEffect } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import axios from 'axios';
 import { FaUpload } from "react-icons/fa";
 import './UploadSpotPage.css'; // Import the CSS file
 
 const UploadSpotPage: React.FC = () => {
-  const user_id = 1;
+  const user_id = localStorage.getItem("user_id");
   const [spot_name, setSpotName] = useState<string>("");
   const [location, setLocation] = useState<string>("");
   const [description, setDescription] = useState<string>("");
-  const [fishSpecies, setFishSpecies] = useState<string>("");
-  const [photo_url, setPhoto_url] = useState<File>();
+  const [fish_type, setFishSpecies] = useState<string>("");
+  const [photo_url, setPhoto_url] = useState<string>(""); // Will store the Cloudinary URL
+  const [inputFile, setInputFile] = useState<File | null>(null); // Store the selected file
+  const [uploading, setUploading] = useState<boolean>(false); // Upload state
 
   const handleInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -33,30 +35,66 @@ const UploadSpotPage: React.FC = () => {
     }
   };
 
-  const sendPostDataToServer = async () => {
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setInputFile(e.target.files[0]);
+    }
+  };
+
+  const uploadImgToCloudinary = async (): Promise<string | null> => {
+    if (!inputFile) {
+      alert("Please select a file to upload!");
+      return null;
+    }
+
+    const formData = new FormData();
+    formData.append("file", inputFile);
+    formData.append("upload_preset", "yxk5zsh4");
+
     try {
-      const response = await axios.post("http://localhost:3001/posts/new" , {
+      setUploading(true);
+      const response = await axios.post(
+        "https://api.cloudinary.com/v1_1/dstq5xce2/image/upload",
+        formData
+      );
+      setUploading(false);
+      setPhoto_url(response.data.secure_url); // Save the image URL
+      console.log("Image uploaded: ", response.data.secure_url);
+      return response.data.secure_url; // Return the URL after successful upload
+    } catch (error) {
+      setUploading(false);
+      console.error("Error uploading image: ", error);
+      return null;
+    }
+  };
+
+  const sendPostDataToServer = async (uploadedImageUrl: string) => {
+    try {
+      const response = await axios.post("http://localhost:3001/posts/new", {
         user_id,
         spot_name,
         location,
         description,
-        fishSpecies,
-        photo_url,
-      })
+        fish_type,
+        photo_url: uploadedImageUrl, // Use the uploaded image URL
+      });
       console.log(response.data);
       alert("Spot uploaded successfully!");
-    } catch(error) {
-      console.log(error);
+    } catch (error) {
+      console.log("Error uploading spot data: ", error);
     }
-  }
-  
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-      sendPostDataToServer();
+    
+    // First, upload the image to Cloudinary and get the URL
+    const uploadedImageUrl = await uploadImgToCloudinary();
+    
+    // If the image was uploaded successfully, send the post data to the server
+    if (uploadedImageUrl) {
+      await sendPostDataToServer(uploadedImageUrl);
+    }
   };
 
   return (
@@ -120,24 +158,21 @@ const UploadSpotPage: React.FC = () => {
           <label className="block text-gray-700 font-bold mb-2">Upload Images</label>
           <div className="upload-image-area">
             <FaUpload className="upload-icon" />
-            <p>
-              Drag and drop your images here, or click to select files
-            </p>
+            <p>Drag and drop your images here, or click to select files</p>
             <input
               type="file"
-              multiple
               onChange={handleFileChange}
               className="hidden-file-input"
               id="uploadImages"
             />
             <label htmlFor="uploadImages" className="cursor-pointer">
-              {/* Optional: Add a button or text to trigger file selection */}
+              Select Image
             </label>
           </div>
         </div>
         {/* Submit Button */}
-        <button type="submit" className="upload-button">
-          Upload Spot
+        <button type="submit" className="upload-button" disabled={uploading}>
+          {uploading ? "Uploading..." : "Upload Spot"}
         </button>
       </form>
     </div>
