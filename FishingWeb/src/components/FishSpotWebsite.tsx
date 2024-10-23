@@ -1,19 +1,28 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaUser } from "react-icons/fa";
 import { BiMenu } from "react-icons/bi";
 
-const FishingSpotWebsite: React.FC = () => {
+interface FishingSpotWebsiteProps {
+  isLoggedIn: boolean;
+  setIsLoggedIn: (value: boolean) => void;
+}
+
+const FishingSpotWebsite: React.FC<FishingSpotWebsiteProps> = ({ isLoggedIn, setIsLoggedIn }) => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [username, setUsername] = useState<string>("");
+
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     setIsLoggedIn(false);
     setUsername("");
     setIsMenuOpen(false);
+    navigate("/");
   };
-
+  if(isLoggedIn == true){
+    console.log("true");
+  }
   return (
     <div className="min-screen bg-gray-100">
       {/* Navigation Bar */}
@@ -21,7 +30,7 @@ const FishingSpotWebsite: React.FC = () => {
         <div className="container mx-auto flex justify-between items-center">
           <h1 className="text-2xl font-bold">FishSpot</h1>
           <div className="hidden md:flex space-x-4">
-            <Link to="/" className="hover:text-blue-200">Home</Link>
+            <Link to="/home" className="hover:text-blue-200">Home</Link>
             <Link to="/explore" className="hover:text-blue-200">Explore Spots</Link>
             <Link to="/upload" className="hover:text-blue-200">Upload Spot</Link>
             <Link to="/mySpots" className="hover:text-blue-200">My Spots</Link>
@@ -31,9 +40,6 @@ const FishingSpotWebsite: React.FC = () => {
                 <Link to="/profile" className="hover:text-blue-200 flex items-center">
                   <FaUser className="mr-1" /> {username}
                 </Link>
-                <button onClick={handleLogout} className="hover:text-blue-200">
-                  Logout
-                </button>
               </>
             ) : (
               <Link to="/login" className="hover:text-blue-200">Login</Link>
@@ -49,7 +55,6 @@ const FishingSpotWebsite: React.FC = () => {
 
       {/* Content */}
       <div className="mt-[4rem]">
-        {/* Ensure there's no spacing issue */}
         {isMenuOpen && (
           <div className="md:hidden bg-blue-500 p-4">
             <Link to="/" onClick={() => setIsMenuOpen(false)} className="block w-full text-left py-2 text-white hover:bg-blue-600">Home</Link>
@@ -74,7 +79,6 @@ const FishingSpotWebsite: React.FC = () => {
           </div>
         )}
 
-        {/* Rest of your content goes here */}
         <div className="container mx-auto mt-4">
           {/* Your content like Explore Spots or other components */}
         </div>

@@ -1,12 +1,20 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import './ProfilePage.css'; // Import the CSS file
 
 interface ProfilePageProps {
   username: string;
-  onLogout: () => void;
+  isLoggedIn: boolean;
+  setIsLoggedIn: (value: boolean) => void;
 }
 
-const ProfilePage: React.FC<ProfilePageProps> = ({ username, onLogout }) => {
+const ProfilePage: React.FC<ProfilePageProps> = ({ username, setIsLoggedIn }) => {
+  const navigate = useNavigate();
+  const onLogout = () => {
+    localStorage.removeItem("user_id");
+    setIsLoggedIn(false);
+    navigate('/');
+  }
   return (
     <div className="profile-container">
       <div className="profile-card">

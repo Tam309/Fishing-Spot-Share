@@ -1,0 +1,114 @@
+/* Global Styles */
+.min-screen {
+  min-height: 100vh;
+  background-color: #f7fafc; /* Equivalent to bg-gray-100 */
+}
+
+/* Navigation Bar */
+.navbar {
+  background-color: #2563eb; /* Equivalent to bg-blue-600 */
+  padding: 1rem;
+  color: white;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 50;
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.menu-desktop {
+  display: flex;
+  gap: 1rem;
+}
+
+.menu-mobile {
+  display: none;
+}
+
+.nav-link {
+  color: white;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.nav-link:hover {
+  color: #93c5fd; /* Equivalent to hover:text-blue-200 */
+}
+
+.icon {
+  margin-right: 0.25rem;
+}
+
+/* Mobile Menu */
+.menu-mobile-expanded {
+  background-color: #2563eb;
+  padding: 1rem;
+}
+
+.mobile-link {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0.5rem;
+  color: white;
+  text-decoration: none;
+  transition: background-color 0.3s;
+}
+
+.mobile-link:hover {
+  background-color: #1e40af; /* Equivalent to hover:bg-blue-600 */
+}
+
+/* Content Area */
+.content {
+  margin-top: 4rem; /* Spacing to push content below navbar */
+}
+
+.container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+
+.main-screen.min-screen {
+  height: auto;
+  min-height: auto;
+}
+
+.main-screen .content,
+.main-screen + .fullscreen-container .content,
+.main-screen .container {
+  margin: 0
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .menu-desktop {
+    display: none;
+  }
+  
+  .menu-mobile {
+    display: block;
+  }
+
+  .main-screen .content {
+    justify-content: initial;
+    align-items: initial;
+  }
+
+  .main-screen .container {
+    padding: 0;
+  }
+}

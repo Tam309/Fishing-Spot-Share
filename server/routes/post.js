@@ -1,6 +1,7 @@
 const express = require("express");
 const { query } = require("../helpers/db");
 
+
 const postRouter = express.Router();
 
 // Create new post
@@ -114,6 +115,32 @@ postRouter.get("/posts/:post_id", async (req, res) => {
   
       // Return the result
       res.status(200).json(rows[0]);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  //Get post based on user_id
+postRouter.get("/posts/user/:user_id", async (req, res) => {
+    const user_id = Number(req.params.user_id);
+  
+    try {
+      // Combine the queries into a single one using a JOIN
+      const sql = `SELECT * FROM posts where user_id=$1`;
+  
+      // Use the single query to fetch post data and user_name
+      const result = await query(sql, [user_id]);
+  
+      // Check if rows exist
+      const rows = result.rows ? result.rows : [];
+  
+      if (rows.length === 0) {
+        return res.status(404).json({ message: "Post not found" });
+      }
+  
+      // Return the result
+      res.status(200).json(rows);
     } catch (error) {
       console.log(error);
       res.status(500).json({ error: error.message });

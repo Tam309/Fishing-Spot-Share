@@ -3,11 +3,16 @@ import './LoginPage.css'; // Import the CSS file
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const LoginPage: React.FC = () => {
+interface LoginPageProps {
+  isLoggedIn: boolean;
+  setIsLoggedIn: (value: boolean) => void;
+}
+
+const LoginPage: React.FC<LoginPageProps> = ({ setIsLoggedIn }) => {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [error, setError] = useState<string>('');
-  const navigate = useNavigate(); // Hook to programmatically navigate
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -17,22 +22,19 @@ const LoginPage: React.FC = () => {
         password: password
       });
       if(response.status === 200) {
-        console.log(response);
-        navigate('/');
+        const user_id = response.data.user_id;
+        localStorage.setItem("user_id", user_id.toString());
+        setIsLoggedIn(true); // Update login state
+        navigate('/home');
       }
     } catch (error) {
-      setError('Invalid username or password! Pleas try again');
-      console.log(error)
-    }
-    
-    if (username.trim() === '' || password.trim() === '') {
-      setError('Please enter both username and password.');
-      return;
+      setError('Invalid username or password! Please try again');
+      console.log(error);
     }
   };
 
   const handleRegister = () => {
-    navigate('/register'); // Navigate to the register page
+    navigate('/register');
   };
 
   return (
@@ -41,7 +43,6 @@ const LoginPage: React.FC = () => {
         <h2>Login to FishSpot</h2>
         {error && <p className="error-message">{error}</p>}
         <form onSubmit={handleSubmit}>
-          {/* Username Field */}
           <div className="input-group">
             <label htmlFor="username">Username</label>
             <input
@@ -52,7 +53,6 @@ const LoginPage: React.FC = () => {
               placeholder="Enter your username"
             />
           </div>
-          {/* Password Field */}
           <div className="input-group">
             <label htmlFor="password">Password</label>
             <input
@@ -63,13 +63,9 @@ const LoginPage: React.FC = () => {
               placeholder="Enter your password"
             />
           </div>
-          {/* Submit Button */}
           <button type="submit" className="submit-btn">Login</button>
         </form>
-        {/* Register Link */}
-        <p className="register-link">
-          Don't have an account?
-        </p>
+        <p className="register-link">Don't have an account?</p>
         <button onClick={handleRegister} className="register-btn">Register</button>
       </div>
     </div>

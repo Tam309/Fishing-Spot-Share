@@ -1,5 +1,4 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./MySpotsPage.css"; // Import the CSS file
@@ -14,14 +13,15 @@ interface MySpot {
 const MySpotsPage: React.FC = () => {
   const [mySpots, setMySpots] = useState<MySpot[]>([]);
   const navigate = useNavigate();
+  const user_id = localStorage.getItem("user_id")
 
+  // Fetch user's posts based on user_id from JWT in the cookies
   const fetchPostData = async () => {
     try {
-      const response = await fetch("http://localhost:3001");
-      const data = await response.json();
-      setMySpots(data);
+      const response = await axios.get(`http://localhost:3001/posts/user/${user_id}`);
+      setMySpots(response.data); // Set the fetched posts
     } catch (error) {
-      console.log(error);
+      console.log("Error fetching posts:", error);
     }
   };
 
@@ -40,16 +40,15 @@ const MySpotsPage: React.FC = () => {
     try {
       const response = await axios.delete(`http://localhost:3001/posts/${id}`);
       console.log(response.data);
-      
+
       // Update the state to remove the deleted post
       setMySpots((prevSpots) => prevSpots.filter((spot) => spot.post_id !== id));
-      
     } catch (error) {
       console.log(error);
     }
     console.log(`Delete spot with ID: ${id}`);
   };
-  
+
   const handleSinglePostPage = (post_id: number) => {
     navigate(`/posts/${post_id}`);
   };
@@ -59,9 +58,9 @@ const MySpotsPage: React.FC = () => {
       <h2 className="my-spots-heading">My Fishing Spots</h2>
       <div className="my-spots-grid">
         {mySpots.map((spot) => (
-          <div 
-            key={spot.post_id} 
-            className="spot-card" 
+          <div
+            key={spot.post_id}
+            className="spot-card"
             onClick={() => handleSinglePostPage(spot.post_id)}
           >
             <img src="https://placehold.co/723x964" alt={spot.spot_name} />
