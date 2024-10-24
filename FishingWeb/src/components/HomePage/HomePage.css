@@ -43,6 +43,7 @@
     font-size: 3rem; /* equivalent to text-5xl */
     font-weight: bold;
     margin-bottom: 16px;
+    color: white
   }
   
   .content p {

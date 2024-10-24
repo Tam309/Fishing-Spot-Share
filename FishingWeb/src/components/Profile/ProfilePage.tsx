@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import './ProfilePage.css'; // Import the CSS file
+import styles from './ProfilePage.module.css'; // Import the CSS module
 
 interface ProfilePageProps {
   username: string;
@@ -10,52 +10,55 @@ interface ProfilePageProps {
 
 const ProfilePage: React.FC<ProfilePageProps> = ({ username, setIsLoggedIn }) => {
   const navigate = useNavigate();
+
   const onLogout = () => {
     localStorage.removeItem("user_id");
     setIsLoggedIn(false);
     navigate('/');
-  }
+  };
+
   return (
-    <div className="profile-container">
-      <div className="profile-card">
+    <div className={styles.profileContainer}>
+      <div className={styles.profileCard}>
         {/* Profile Header */}
-        <div className="profile-header">
+        <div className={styles.profileHeader}>
           <img
             src={`https://api.adorable.io/avatars/285/${username}.png`} // Placeholder avatar
             alt="Profile"
-            className="profile-avatar"
+            className={styles.profileAvatar}
           />
           <div>
-            <h2 className="profile-username">Welcome, {username}!</h2>
-            <p className="profile-bio">Avid angler and nature enthusiast</p>
-            <p className="profile-bio">Seattle, Washington</p>
+            <h2 className={styles.profileUsername}>Welcome, {username}!</h2>
+            <p className={styles.profileBio}>Avid angler and nature enthusiast</p>
+            <p className={styles.profileBio}>Seattle, Washington</p>
           </div>
         </div>
         {/* Bio Section */}
         <div className="mb-6">
           <h3 className="text-xl font-semibold mb-2">Bio</h3>
-          <p className="profile-bio">
+          <p className={styles.profileBio}>
             I've been fishing for over 20 years and love exploring new spots. Always up for trading fishing stories and tips!
           </p>
         </div>
         {/* Statistics */}
-        <div className="profile-stats">
-          <div className="profile-stat-card">
-            <h4 className="profile-stat-title">Spots Uploaded</h4>
-            <p className="profile-stat-number">15</p>
+        <div className={styles.profileStats}>
+          <div className={styles.profileStatCard}>
+            <h4 className={styles.profileStatTitle}>Spots Uploaded</h4>
+            <p className={styles.profileStatNumber}>15</p>
           </div>
-          <div className="profile-stat-card">
-            <h4 className="profile-stat-title">Total Likes</h4>
-            <p className="profile-stat-number">127</p>
+          <div className={styles.profileStatCard}>
+            <h4 className={styles.profileStatTitle}>Total Likes</h4>
+            <p className={styles.profileStatNumber}>127</p>
           </div>
         </div>
         {/* Logout Button */}
         <button
           onClick={onLogout}
-          className="logout-btn"
+          className={styles.logoutBtn}
         >
           Logout
         </button>
+
       </div>
     </div>
   );

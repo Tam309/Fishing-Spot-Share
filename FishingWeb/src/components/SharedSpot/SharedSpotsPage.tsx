@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FaUser, FaFish, FaComments } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import "./SharedSpotsPage.css"; // Import the CSS file
 import axios from "axios";
 
@@ -10,10 +11,12 @@ interface SharedSpot {
   photo_url: string;
   sharedBy: string;
   date: string;
+  user_name: string;
 }
 
 const SharedSpotsPage: React.FC = () => {
   const [sharedSpots, setSharedSpots] = useState<SharedSpot[]>([]);
+  const navigate = useNavigate();
 
   const fetchPost = async () => {
     try {
@@ -32,6 +35,7 @@ const SharedSpotsPage: React.FC = () => {
 
   const handleDiscuss = (id: number) => {
     console.log(`Discuss spot with ID: ${id}`);
+    navigate(`/discuss`);
   };
 
   return (
@@ -46,7 +50,7 @@ const SharedSpotsPage: React.FC = () => {
               <p className="shared-description">{spot.description}</p>
               <div className="shared-footer">
                 <span className="shared-footer-icon">
-                  <FaUser /> {spot.sharedBy}
+                  <FaUser /> {spot.user_name}
                 </span>
                 <span>{spot.date}</span>
               </div>

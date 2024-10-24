@@ -3,6 +3,7 @@ create table users (
     user_name varchar(100) unique not null,
     email varchar(100) unique not null,
     password varchar(255) not null,
+    
 ) CREATE TABLE posts (
     post_id serial primary key,
     spot_name varchar(100) not null,

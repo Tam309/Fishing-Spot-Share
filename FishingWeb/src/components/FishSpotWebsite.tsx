@@ -28,7 +28,7 @@ const FishingSpotWebsite: React.FC<FishingSpotWebsiteProps> = ({ isLoggedIn, set
       {/* Navigation Bar */}
       <nav className="bg-blue-600 p-4 text-white fixed w-full top-0 z-50">
         <div className="container mx-auto flex justify-between items-center">
-          <h1 className="text-2xl font-bold">FishSpot</h1>
+          <h1 className="text-2xl font-bold text-white">FishSpot</h1>
           <div className="hidden md:flex space-x-4">
             <Link to="/home" className="hover:text-blue-200">Home</Link>
             <Link to="/explore" className="hover:text-blue-200">Explore Spots</Link>

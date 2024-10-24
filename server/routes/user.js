@@ -88,4 +88,37 @@ userRouter.put("/users/password", async(req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
+
+//Get user's profile based on user_id
+userRouter.get("/users/:user_id", async (req, res) => {
+    try {
+        const sql = "SELECT user_id, nick_name, location, bio, avatar FROM users WHERE user_id = $1";
+        const result = await query(sql, [req.params.user_id]);
+        const rows = result.rows ? result.rows : [];
+        res.status(200).json(rows[0]);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+//Edit user's profile
+userRouter.put("/users/edit/:user_id", async (req, res) => {
+    const user_id = Number(req.params.user_id);
+    const nick_name = req.body.nick_name;
+    const avatar = req.body.avatar;
+    const location = req.body.location
+    const bio = req.body.bio
+    try {
+        const result = await query(
+            "UPDATE users SET nick_name =$1, avatar = $2, location =$3, bio =$4 WHERE user_id =$5 RETURNING *",
+            [nick_name, avatar, location, bio, user_id]
+        );
+        const rows = result.rows ? result.rows : [];
+        res.status(200).json(rows[0]);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: error.message });
+    }
+});
 module.exports = { userRouter };

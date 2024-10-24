@@ -12,6 +12,8 @@ import EditPostPage from "./components/MySpot/EditPostPage";
 import SinglePostPage from "./components/SinglePost/SinglePostPage";
 import LandingPage from "./components/LandingPage/LandingPage";
 import Layout from "./components/Layout";
+import Discuss from "./components/Discuss/DiscussPage";
+import EditProfilePage from "./components/EditProfilePage/EditProfilePage";
 
 const App: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
@@ -26,17 +28,37 @@ const App: React.FC = () => {
           element={
             <Layout isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}>
               <Routes>
+                <Route path="/editprofile" element={<EditProfilePage />} />
+                <Route path="/" element={<LandingPage />} />
                 <Route path="/home" element={<HomePage />} />
                 <Route path="/explore" element={<ExploreSpotsPage />} />
                 <Route path="/upload" element={<UploadSpotPage />} />
                 <Route path="/mySpots" element={<MySpotsPage />} />
-                <Route path="/profile" element={<ProfilePage username="User" isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />} />
+                <Route
+                  path="/profile"
+                  element={
+                    <ProfilePage
+                      username="User"
+                      isLoggedIn={isLoggedIn}
+                      setIsLoggedIn={setIsLoggedIn}
+                    />
+                  }
+                />
                 <Route path="/sharedSpots" element={<SharedSpotsPage />} />
-                <Route path="/login" element={<LoginPage isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />} />
+                <Route
+                  path="/login"
+                  element={
+                    <LoginPage
+                      isLoggedIn={isLoggedIn}
+                      setIsLoggedIn={setIsLoggedIn}
+                    />
+                  }
+                />
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/edit/:post_id" element={<EditPostPage />} />
                 <Route path="/posts/:post_id" element={<SinglePostPage />} />
-                <Route path="/" element={<LandingPage />} />
+                <Route path="discuss" element={<Discuss />}/>
+                
               </Routes>
             </Layout>
           }

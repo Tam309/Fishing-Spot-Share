@@ -43,7 +43,7 @@ postRouter.post("/posts/new", async (req, res) => {
 // Get all posts
 postRouter.get("/", async (req, res) => {
   try {
-    const sql = "SELECT * FROM posts";
+    const sql = "select posts.*, users.user_name from posts join users on posts.user_id = users.user_id";
     const result = await query(sql);
     const rows = result.rows ? result.rows : [];
     res.status(200).json(rows);
