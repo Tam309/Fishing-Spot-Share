@@ -121,4 +121,17 @@ userRouter.put("/users/edit/:user_id", async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
+
+//Get user's avatar based on user Id
+userRouter.get("/users/avatar/:user_id", async(req, res) => {
+    const user_id = Number(req.params.user_id);
+    try {
+        const result = await query("SELECT avatar FROM users WHERE user_id = $1", [user_id]);
+        const rows = result.rows ? result.rows : [];
+        res.status(200).json(rows[0]);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: error.message });
+    }
+})
 module.exports = { userRouter };

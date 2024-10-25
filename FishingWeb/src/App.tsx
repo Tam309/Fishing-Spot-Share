@@ -43,7 +43,6 @@ const App: React.FC = () => {
                   path="/profile"
                   element={
                     <ProfilePage
-                      username="User"
                       isLoggedIn={isLoggedIn}
                       setIsLoggedIn={setIsLoggedIn}
                     />
@@ -62,7 +61,7 @@ const App: React.FC = () => {
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/edit/:post_id" element={<EditPostPage />} />
                 <Route path="/posts/:post_id" element={<SinglePostPage />} />
-                <Route path="discuss" element={<Discuss />}/>
+                <Route path="/discuss/:post_id" element={<Discuss />}/>
                 
               </Routes>
             </Layout>

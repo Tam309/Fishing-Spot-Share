@@ -1,89 +1,132 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useParams } from "react-router-dom";
 import styles from "./DiscussPage.module.css";
 import { FaCommentAlt, FaFish, FaUser, FaCalendarAlt } from "react-icons/fa";
 
-// Define the structure of a comment
+// Define the structure of a post and comment
+interface Post {
+  spot_name: string;
+  description: string;
+  photo_url: string;
+  fish_type: string;
+  nick_name: string;
+  saved?: string;
+}
+
 interface Comment {
-  message: string;
+  comment_content: string;
   avatar: string;
-  time: string;
+  nick_name: string;
+  saved: string;
 }
 
 const Discuss: React.FC = () => {
-  // Sample fishing spot data (this can be passed as props or fetched from an API)
-  const myPost = {
-    spot_name: "Kuivasjärvi",
-    description: "This place has a huge amount of fish",
-    photo_url:
-      "https://res.cloudinary.com/dstq5xce2/image/upload/v1729684927/p4oyealh1t46cg43ylfj.jpg",
-    fish_type: ["Carp", "Bass"],
-    user_name: "tam",
-    // saved: "2024-10-20T10:30:00Z", // Uncomment and use if needed
-  };
+  const { post_id } = useParams<{ post_id: string }>(); // Getting post_id from route params
+  const user_id = localStorage.getItem("user_id");
+
+  // State to hold the post data
+  const [post, setPost] = useState<Post | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   // State to hold comments
-  const [comments, setComments] = useState<Comment[]>([
-    {
-      message: "This is a great spot! I caught a bass here last week.",
-      avatar: "https://randomuser.me/api/portraits/men/1.jpg",
-      time: "16 mins ago",
-    },
-    {
-      message: "Planning to visit this place next month!",
-      avatar: "https://randomuser.me/api/portraits/women/2.jpg",
-      time: "19 mins ago",
-    },
-  ]);
+  const [comments, setComments] = useState<Comment[]>([])
 
   // State to hold form input
   const [userComment, setUserComment] = useState<string>("");
 
+  // Fetch post data from the API
+  useEffect(() => {
+    const fetchPostData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3001/posts/${post_id}`);
+        setPost(response.data);
+      } catch (error) {
+        setError("Failed to load post data");
+        console.error("Error fetching post data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPostData();
+  }, [post_id]);
+
+  // Fetch comments data from the API
+  useEffect(() => {
+    const fetchComments = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3001/posts/${post_id}/comments`);
+        setComments(response.data);
+      } catch (error) {
+        console.error("Error fetching comments data:", error);
+      }
+    };
+
+    fetchComments();
+  }, [post_id]);
+
+  // Send new comment to back_end
+  const sendComment = async () => {
+    try {
+      const response = await axios.post(`http://localhost:3001/posts/${post_id}/comments`, {
+        user_id,
+        comment_content: userComment
+      });
+      console.log(response.data);
+      setComments([...comments, response.data]); // Update the comments state 
+      setUserComment(""); // Clear the input field
+    } catch (error) {
+      console.error("Error posting comment:", error);
+    }
+  }
+
   // Handle form submission
   const handleSubmit = () => {
-    if (userComment) {
-      const newComment: Comment = {
-        message: userComment,
-        avatar: "https://randomuser.me/api/portraits/men/3.jpg", // Placeholder avatar
-        time: "Just now",
-      };
-      setComments([...comments, newComment]);
-
-      // Clear input fields
-      setUserComment("");
-    }
-    console.log("clicked")
+    console.log("clicked");
+    if (!userComment) return; 
+    sendComment();  
   };
+
+  if (loading) return <p>Loading post...</p>;
+  if (error) return <p>{error}</p>;
 
   return (
     <div className={styles.container}>
       {/* Fishing Spot Post */}
-      <div className={styles['single-post-container']}>
-        <div className={styles['single-post-image']}>
-          <img
-            src={myPost.photo_url}
-            alt={myPost.spot_name}
-            className={styles['single-post-main-image']}
-          />
-        </div>
-        <div className={styles['single-post-content']}>
-          <h1 className={styles['single-post-title']}>{myPost.spot_name}</h1>
-          <div className={styles['single-post-meta']}>
-            <span className={styles['single-post-author']}>
-              <FaUser /> {myPost.user_name}
-            </span>
-            <span className={styles['single-post-date']}>
-              {/* Uncomment and use if needed */}
-              {/* <FaCalendarAlt /> {myPost.saved?.split("T")[0]} */}
-            </span>
+      {post && (
+        <div className={styles["single-post-container"]}>
+          <div className={styles["single-post-image"]}>
+            <img
+              src={post.photo_url}
+              alt={post.spot_name}
+              className={styles["single-post-main-image"]}
+            />
           </div>
-          <p className={styles['single-post-description']}>
-            {myPost.description}
-          </p>
-          <div className={styles['single-post-fish-species']}>
-            <FaFish /> {myPost.fish_type.join(", ")}
+          <div className={styles["single-post-content"]}>
+            <h1 className={styles["single-post-title"]}>{post.spot_name}</h1>
+            <div className={styles["single-post-meta"]}>
+              <span className={styles["single-post-author"]}>
+                <FaUser /> {post.nick_name}
+              </span>
+              <span className={styles["single-post-date"]}>
+                {post.saved && (
+                  <>
+                    <FaCalendarAlt /> {post.saved.split("T")[0]}
+                  </>
+                )}
+              </span>
+            </div>
+            <p className={styles["single-post-description"]}>
+              {post.description}
+            </p>
+            <div className={styles["single-post-fish-species"]}>
+              <FaFish /> {post.fish_type ? post.fish_type : "No fish types available"}
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Comments Section */}
       <div className={styles.comments}>
@@ -95,10 +138,9 @@ const Discuss: React.FC = () => {
               className={styles.commentAvatar}
             />
             <div className={styles.commentContent}>
-              {/* <h5>{comment.name}</h5> */}
-              <p className={styles.commentText}>{comment.message}</p>
+              <p className={styles.commentText}>{comment.comment_content}</p>
               <div className={styles.commentActions}>
-                <span>{comment.time}</span>
+                <span>{comment.saved}</span>
                 <div>
                   <button className={styles.btnPrimary}>Reply</button>
                 </div>

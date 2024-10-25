@@ -11,7 +11,7 @@ interface SharedSpot {
   photo_url: string;
   sharedBy: string;
   date: string;
-  user_name: string;
+  nick_name: string;
 }
 
 const SharedSpotsPage: React.FC = () => {
@@ -33,9 +33,9 @@ const SharedSpotsPage: React.FC = () => {
     fetchPost();
   }, []);
 
-  const handleDiscuss = (id: number) => {
-    console.log(`Discuss spot with ID: ${id}`);
-    navigate(`/discuss`);
+  const handleDiscuss = (post_id: number) => {
+    console.log(`Discuss spot with ID: ${post_id}`);
+    navigate(`/discuss/${post_id}`);
   };
 
   return (
@@ -50,7 +50,7 @@ const SharedSpotsPage: React.FC = () => {
               <p className="shared-description">{spot.description}</p>
               <div className="shared-footer">
                 <span className="shared-footer-icon">
-                  <FaUser /> {spot.user_name}
+                  <FaUser /> {spot.nick_name}
                 </span>
                 <span>{spot.date}</span>
               </div>
