@@ -1,5 +1,6 @@
 import React, { useState, ChangeEvent, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { FaUpload } from "react-icons/fa";
 import styles from "./EditProfilePage.module.css";
 
@@ -11,7 +12,10 @@ const EditProfilePage: React.FC = () => {
   const [inputFile, setInputFile] = useState<File | null>(null);
   const [avatar, setAvatar] = useState<string>("");
   const [uploading, setUploading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false); // New loading state
   const user_id = localStorage.getItem("user_id");
+
+  const navigate = useNavigate();
 
   if (!user_id) {
     console.error("User ID not found in localStorage");
@@ -21,7 +25,9 @@ const EditProfilePage: React.FC = () => {
   // Fetch user's profile when the page loads
   const fetchUserProfile = async () => {
     try {
-      const response = await axios.get(`http://localhost:3001/users/${user_id}`);
+      const response = await axios.get(
+        `http://localhost:3001/users/${user_id}`
+      );
       const data = response.data;
       console.log(data); // Check if data is being fetched correctly
 
@@ -71,14 +77,17 @@ const EditProfilePage: React.FC = () => {
   };
 
   // Send data to server when button clicked
-  const updateUserProfile = async () => {
+  const updateUserProfile = async (avatarUrl: string | null) => {
     try {
-      const response = await axios.put(`http://localhost:3001/users/edit/${user_id}`, {
-        nick_name: nick_name,
-        location: location,
-        bio: bio,
-        avatar: avatar, // Use the updated avatar URL
-      });
+      const response = await axios.put(
+        `http://localhost:3001/users/edit/${user_id}`,
+        {
+          nick_name: nick_name,
+          location: location,
+          bio: bio,
+          avatar: avatarUrl || avatar, // Use the newly uploaded avatar URL, or fallback to existing avatar
+        }
+      );
       console.log("Profile updated:", response.data);
     } catch (error) {
       console.error("Failed to update profile:", error);
@@ -88,9 +97,27 @@ const EditProfilePage: React.FC = () => {
   // Handler functions
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    const uploadImg = await uploadImgToCloudinary();
-    if (uploadImg) {
-      await updateUserProfile();
+    setIsLoading(true); // Set loading state to true when form submission starts
+
+    try {
+      let uploadImg: string | null = null;
+
+      // Check if the user selected a file to upload
+      if (inputFile) {
+        uploadImg = await uploadImgToCloudinary();
+      }
+
+      // Proceed to update the profile if the image is uploaded successfully, or if no new image is uploaded
+      if (!inputFile || uploadImg) {
+        await updateUserProfile(uploadImg); // Pass the image URL (if uploaded) to the profile update
+      }
+
+      // Navigate to the profile page or give success feedback
+      navigate("/profile");
+    } catch (error) {
+      console.error("Error saving profile:", error);
+    } finally {
+      setIsLoading(false); // Reset loading state after submission completes
     }
   };
 
@@ -106,6 +133,7 @@ const EditProfilePage: React.FC = () => {
             value={nick_name} // Ensure the value is set
             onChange={(e) => setName(e.target.value)}
             className={styles.input}
+            disabled={isLoading} // Disable input when loading
           />
         </div>
         <div className={styles.formGroup}>
@@ -116,6 +144,7 @@ const EditProfilePage: React.FC = () => {
             value={location} // Ensure the value is set
             onChange={(e) => setLocation(e.target.value)}
             className={styles.input}
+            disabled={isLoading} // Disable input when loading
           />
         </div>
         <div className={styles.formGroup}>
@@ -125,6 +154,7 @@ const EditProfilePage: React.FC = () => {
             value={bio} // Ensure the value is set
             onChange={(e) => setBio(e.target.value)}
             className={styles.textarea}
+            disabled={isLoading} // Disable textarea when loading
           />
         </div>
         <div>
@@ -137,6 +167,7 @@ const EditProfilePage: React.FC = () => {
               onChange={handleFileChange}
               className={styles["hidden-file-input"]}
               id="uploadImages"
+              disabled={isLoading} // Disable file input when loading
             />
             <label htmlFor="uploadImages" className="cursor-pointer">
               Select Image
@@ -144,8 +175,19 @@ const EditProfilePage: React.FC = () => {
           </div>
         </div>
         <div className={styles.actions}>
-          <button type="submit" className={styles.saveBtn}>Save Changes</button>
-          <button type="button" className={styles.cancelBtn} onClick={() => console.log("Cancelled")}>
+          <button
+            type="submit"
+            className={styles.saveBtn}
+            disabled={isLoading} // Disable save button when loading
+          >
+            {isLoading ? "Saving..." : "Save Changes"}
+          </button>
+          <button
+            type="button"
+            className={styles.cancelBtn}
+            onClick={() => console.log("Cancelled")}
+            disabled={isLoading} // Disable cancel button when loading
+          >
             Cancel
           </button>
         </div>

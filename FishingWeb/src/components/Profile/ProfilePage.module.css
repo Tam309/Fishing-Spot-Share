@@ -97,3 +97,54 @@
 .logoutBtn:hover {
   background-color: #b91c1c; /* hover:bg-red-700 */
 }
+
+/* Profile Header */
+.profileHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.profileInfo {
+  display: flex;
+  align-items: center;
+}
+
+/* Edit Profile Button */
+.editProfileBtn {
+  background-color: #2563eb; /* Blue button */
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.editProfileBtn:hover {
+  background-color: #1d4ed8; /* Darker blue on hover */
+}
+
+/* Avatar */
+.profileAvatar {
+  width: 8rem; /* w-32 */
+  height: 8rem;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 24px;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+  .profileHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .editProfileBtn {
+    margin-top: 16px;
+  }
+}
+

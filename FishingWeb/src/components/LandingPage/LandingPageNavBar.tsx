@@ -10,7 +10,7 @@ const LandingPageNavBar: React.FC = () => {
     <nav className="bg-blue-600 p-4 text-white fixed w-full top-0 z-50">
       <div className="container mx-auto flex justify-between items-center">
         {/* Logo */}
-        <h1 className="text-2xl font-bold">FishSpot</h1>
+        <h1 className="text-2xl text-white font-bold">FishSpot</h1>
 
         {/* Remove other navigation links */}
         <div className="hidden md:flex space-x-4">
