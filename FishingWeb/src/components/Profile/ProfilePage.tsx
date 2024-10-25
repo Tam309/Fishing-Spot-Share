@@ -13,6 +13,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ username, setIsLoggedIn }) =>
 
   const onLogout = () => {
     localStorage.removeItem("user_id");
+    localStorage.removeItem("loggedIn");
     setIsLoggedIn(false);
     navigate('/');
   };

@@ -16,7 +16,12 @@ import Discuss from "./components/Discuss/DiscussPage";
 import EditProfilePage from "./components/EditProfilePage/EditProfilePage";
 
 const App: React.FC = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(localStorage.getItem("loggedIn") === "true");
+
+  const handleSetIsLoggedIn = (value: boolean) => {
+    setIsLoggedIn(value);
+    localStorage.setItem("loggedIn", value.toString());
+  };
 
   return (
     <Router>
@@ -26,7 +31,7 @@ const App: React.FC = () => {
         <Route
           path="*"
           element={
-            <Layout isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}>
+            <Layout isLoggedIn={isLoggedIn} setIsLoggedIn={handleSetIsLoggedIn}>
               <Routes>
                 <Route path="/editprofile" element={<EditProfilePage />} />
                 <Route path="/" element={<LandingPage />} />

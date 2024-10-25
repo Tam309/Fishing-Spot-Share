@@ -20,6 +20,7 @@ const FishingSpotWebsite: React.FC<FishingSpotWebsiteProps> = ({ isLoggedIn, set
     setIsMenuOpen(false);
     navigate("/");
   };
+  
   if(isLoggedIn == true){
     console.log("true");
   }

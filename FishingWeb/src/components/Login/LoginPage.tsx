@@ -24,6 +24,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ setIsLoggedIn }) => {
       if(response.status === 200) {
         const user_id = response.data.user_id;
         localStorage.setItem("user_id", user_id.toString());
+        localStorage.setItem("loggedIn", "true");
         setIsLoggedIn(true); // Update login state
         navigate('/home');
       }
