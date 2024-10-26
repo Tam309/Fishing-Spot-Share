@@ -3,6 +3,53 @@ const { query } = require("../helpers/db.js");
 
 const commentRouter = express.Router();
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Comment:
+ *       type: object
+ *       properties:
+ *         comment_id:
+ *           type: integer
+ *         post_id:
+ *           type: integer
+ *         user_id:
+ *           type: integer
+ *         comment_content:
+ *           type: string
+ *         saved:
+ *           type: boolean
+ *         user_name:
+ *           type: string
+ *         avatar:
+ *           type: string
+ */
+
+/**
+ * @swagger
+ * /posts/{post_id}/comments:
+ *   get:
+ *     summary: Get all comments for a specific post
+ *     tags:
+ *       - Comment
+ *     parameters:
+ *       - in: path
+ *         name: post_id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: List of comments for the post
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Comment'
+ */
+
 // Get all comments from a post by ID
 commentRouter.get("/posts/:post_id/comments", async (req, res) => {
   const id = req.params.post_id;
@@ -16,6 +63,39 @@ commentRouter.get("/posts/:post_id/comments", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+/**
+ * @swagger
+ * /posts/{post_id}/comments:
+ *   post:
+ *     summary: Create a new comment for a specific post
+ *     tags:
+ *        - Comment
+ *     parameters:
+ *       - in: path
+ *         name: post_id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               user_id:
+ *                 type: integer
+ *               comment_content:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Comment created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Comment'
+ */
 
 // *WORK* Create new comment
 commentRouter.post("/posts/:post_id/comments", async (req, res) => {
@@ -55,7 +135,41 @@ commentRouter.post("/posts/:post_id/comments", async (req, res) => {
   }
 });
 
-
+/**
+ * @swagger
+ * /posts/{post_id}/comments/{comment_id}:
+ *   put:
+ *     summary: Edit an existing comment by ID
+ *     tags:
+ *        - Comment
+ *     parameters:
+ *       - in: path
+ *         name: post_id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *       - in: path
+ *         name: comment_id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               comment_content:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Comment updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Comment'
+ */
 
 // Edit a comment
 commentRouter.put("/posts/:post_id/comments/:comment_id", async (req, res) => {
@@ -71,6 +185,36 @@ commentRouter.put("/posts/:post_id/comments/:comment_id", async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
+
+/**
+ * @swagger
+ * /posts/{post_id}/comments/{comment_id}:
+ *   delete:
+ *     summary: Delete a comment by ID
+ *     tags:  
+ *        - Comment
+ *     parameters:
+ *       - in: path
+ *         name: post_id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *       - in: path
+ *         name: comment_id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Comment deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 comment_id:
+ *                   type: integer
+ */
 
 // Delete a comment by ID
 commentRouter.delete(

@@ -2,6 +2,7 @@ require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
 const bodyParser = require('body-parser');
+const swaggerDocs = require('./swagger');
 
 const { userRouter } = require('./routes/user.js');
 const { cloudinaryRouter } = require('./cloudinary/cloudinary.js')
@@ -24,6 +25,7 @@ app.use('/',cloudinaryRouter)
 app.use('/',postRouter)
 app.use('/',commentRouter)
 
+swaggerDocs(app);
 
 const port = process.env.PORT;
 
