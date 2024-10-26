@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import './LoginPage.css'; // Import the CSS file
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import styles from './LoginPage.module.css';
 
 interface LoginPageProps {
   isLoggedIn: boolean;
@@ -39,12 +39,12 @@ const LoginPage: React.FC<LoginPageProps> = ({ setIsLoggedIn }) => {
   };
 
   return (
-    <div className="login-container">
-      <div className="login-box">
+    <div className={styles.container}>
+      <div className={styles.box}>
         <h2>Login to FishSpot</h2>
-        {error && <p className="error-message">{error}</p>}
+        {error && <p className={styles.errorMessage}>{error}</p>}
         <form onSubmit={handleSubmit}>
-          <div className="input-group">
+          <div className={styles.inputGroup}>
             <label htmlFor="username">Username</label>
             <input
               type="text"
@@ -54,7 +54,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ setIsLoggedIn }) => {
               placeholder="Enter your username"
             />
           </div>
-          <div className="input-group">
+          <div className={styles.inputGroup}>
             <label htmlFor="password">Password</label>
             <input
               type="password"
@@ -64,10 +64,10 @@ const LoginPage: React.FC<LoginPageProps> = ({ setIsLoggedIn }) => {
               placeholder="Enter your password"
             />
           </div>
-          <button type="submit" className="submit-btn">Login</button>
+          <button type="submit" className={styles.submitBtn}>Login</button>
         </form>
-        <p className="register-link">Don't have an account?</p>
-        <button onClick={handleRegister} className="register-btn">Register</button>
+        <p className={styles.registerLink}>Don't have an account?</p>
+        <button onClick={handleRegister} className={styles.registerBtn}>Register</button>
       </div>
     </div>
   );

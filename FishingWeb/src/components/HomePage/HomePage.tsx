@@ -1,39 +1,87 @@
-import React from 'react';
-import { FaSearch } from "react-icons/fa";
-import './HomePage.css'; // Import the CSS file
+import React, { useState, useEffect } from "react";
+import { FaUser, FaFish, FaComments } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import styles from "./HomePage.module.css"; // Import the CSS Module
+import axios from "axios";
 
-const HomePage: React.FC = () => {
+interface SharedSpot {
+  post_id: number;
+  spot_name: string;
+  description: string;
+  photo_url: string;
+  sharedBy: string;
+  date: string;
+  nick_name: string;
+  avatar: string;
+  fish_type: string
+}
+
+const SharedSpotsPage: React.FC = () => {
+  const [sharedSpots, setSharedSpots] = useState<SharedSpot[]>([]);
+  const navigate = useNavigate();
+
+  const fetchPost = async () => {
+    try {
+      const response = await axios.get(`http://localhost:3001`);
+      const data = response.data;
+      setSharedSpots(data);
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchPost();
+  }, []);
+
+  const handleDiscuss = (post_id: number) => {
+    console.log(`Discuss spot with ID: ${post_id}`);
+    navigate(`/discuss/${post_id}`);
+  };
+
   return (
-    <div className="fullscreen-container">
-      {/* Background Image */}
-      <div
-        className="background-image"
-        style={{
-          backgroundImage:
-            "url('https://images.unsplash.com/photo-1514469038836-36452c63d69a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80')",
-        }}
-      ></div>
-      {/* Overlay */}
-      <div className="overlay"></div>
-      {/* Content */}
-      <div className="content">
-        <h1>Discover Your Perfect Fishing Spot</h1>
-        <p>Share and explore the best fishing locations with fellow anglers</p>
-        {/* Search Bar */}
-        <div className="search-container">
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Search for fishing spots..."
+    <div className={styles.container}>
+      <h2 className={styles.title}>Recently Shared Fishing Spots</h2>
+      <div className={styles.grid}>
+        {sharedSpots.map((spot) => (
+          <div key={spot.post_id} className={styles.card} onClick={() => handleDiscuss(spot.post_id)}>
+            <img
+              src={spot.photo_url}
+              alt={spot.spot_name}
+              className={styles.image}
             />
-            <button>
-              <FaSearch size={20} />
-            </button>
+            <div className={styles.content}>
+              <h3 className={styles.spotName}>{spot.spot_name}</h3>
+              <p className={styles.description}>{spot.description}</p>
+              <div className={styles.footer}>
+                <span className={styles.footerIcon}>
+                  <img
+                    src={spot.avatar}
+                    alt="Avatar"
+                    className={styles.commentAvatar}
+                  />{" "}
+                  {spot.nick_name}
+                </span>
+                <span>{spot.date}</span>
+              </div>
+              <div className="mt-4 flex justify-between items-center">
+                <button
+                  onClick={() => handleDiscuss(spot.post_id)}
+                  className={styles.discussBtn}
+                >
+                  <FaComments /> Discuss
+                </button>
+                <span className={styles.fish}>
+                  <FaFish /> {spot.fish_type}
+                </span>
+              </div>
+            </div>
           </div>
-        </div>
+        ))}
       </div>
     </div>
   );
 };
 
-export default HomePage;
+export default SharedSpotsPage;

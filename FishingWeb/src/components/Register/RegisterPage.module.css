@@ -1,0 +1,77 @@
+/* Container */
+.registerContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #f3f4f6;
+}
+
+/* Register Card */
+.registerCard {
+  background-color: white;
+  padding: 32px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Title */
+.registerTitle {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+/* Input Fields */
+.registerInput {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  outline: none;
+}
+
+.registerInput:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.5);
+}
+
+/* Error Message */
+.registerError {
+  color: #dc2626;
+  margin-bottom: 16px;
+}
+
+/* Button */
+.registerBtn {
+  width: 100%;
+  background-color: #16a34a;
+  color: white;
+  padding: 12px 16px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+}
+
+.registerBtn:hover {
+  background-color: #15803d;
+}
+
+/* Link to Login */
+.registerLink {
+  margin-top: 16px;
+  text-align: center;
+  color: #4b5563;
+}
+
+.registerLink a {
+  color: #2563eb;
+  text-decoration: none;
+}
+
+.registerLink a:hover {
+  text-decoration: underline;
+}

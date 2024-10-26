@@ -8,7 +8,7 @@ commentRouter.get("/posts/:post_id/comments", async (req, res) => {
   const id = req.params.post_id;
   try {
     const sql =
-      "select comments.*, users.nick_name, users.avatar from comments join users on comments.user_id = users.user_id WHERE post_id=$1";
+      "select comments.*, users.nick_name, users.avatar, users.user_id from comments join users on comments.user_id = users.user_id WHERE post_id=$1";
     const result = await query(sql, [id]);
     const rows = result.rows ? result.rows : [];
     res.status(200).json(rows);

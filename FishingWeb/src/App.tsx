@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import HomePage from "./components/HomePage/HomePage";
-import ExploreSpotsPage from "./components/ExploreSpot/ExploreSpotsPage";
 import UploadSpotPage from "./components/UploadSpot/UploadSpotPage";
 import MySpotsPage from "./components/MySpot/MySpotsPage";
 import ProfilePage from "./components/Profile/ProfilePage";
-import SharedSpotsPage from "./components/SharedSpot/SharedSpotsPage";
 import LoginPage from "./components/Login/LoginPage";
 import RegisterPage from "./components/Register/RegisterPage";
 import EditPostPage from "./components/MySpot/EditPostPage";
@@ -35,8 +33,7 @@ const App: React.FC = () => {
               <Routes>
                 <Route path="/editprofile" element={<EditProfilePage />} />
                 <Route path="/" element={<LandingPage />} />
-                <Route path="/home" element={<HomePage />} />
-                <Route path="/explore" element={<ExploreSpotsPage />} />
+                {/* <Route path="/home" element={<HomePage />} /> */}
                 <Route path="/upload" element={<UploadSpotPage />} />
                 <Route path="/mySpots" element={<MySpotsPage />} />
                 <Route
@@ -48,7 +45,7 @@ const App: React.FC = () => {
                     />
                   }
                 />
-                <Route path="/sharedSpots" element={<SharedSpotsPage />} />
+                <Route path="/home" element={<HomePage />} />
                 <Route
                   path="/login"
                   element={

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import "./MySpotsPage.css"; // Import the CSS file
+import styles from "./MySpotsPage.module.css"; // Import the CSS module
 
 interface MySpot {
   post_id: number;
@@ -13,13 +13,13 @@ interface MySpot {
 const MySpotsPage: React.FC = () => {
   const [mySpots, setMySpots] = useState<MySpot[]>([]);
   const navigate = useNavigate();
-  const user_id = localStorage.getItem("user_id")
+  const user_id = localStorage.getItem("user_id");
 
-  // Fetch user's posts based on user_id from JWT in the cookies
+  // Fetch user's posts
   const fetchPostData = async () => {
     try {
       const response = await axios.get(`http://localhost:3001/posts/user/${user_id}`);
-      setMySpots(response.data); // Set the fetched posts
+      setMySpots(response.data);
     } catch (error) {
       console.log("Error fetching posts:", error);
     }
@@ -30,23 +30,19 @@ const MySpotsPage: React.FC = () => {
   }, []);
 
   const handleEdit = (post_id: number, e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent the card's click event
-    navigate(`/edit/${post_id}`); // Navigate to the edit page
+    e.stopPropagation();
+    navigate(`/edit/${post_id}`);
     console.log(`Edit spot with ID: ${post_id}`);
   };
 
   const handleDelete = async (id: number, e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent the card's click event
+    e.stopPropagation();
     try {
       const response = await axios.delete(`http://localhost:3001/posts/${id}`);
-      console.log(response.data);
-
-      // Update the state to remove the deleted post
       setMySpots((prevSpots) => prevSpots.filter((spot) => spot.post_id !== id));
     } catch (error) {
       console.log(error);
     }
-    console.log(`Delete spot with ID: ${id}`);
   };
 
   const handleSinglePostPage = (post_id: number) => {
@@ -54,29 +50,29 @@ const MySpotsPage: React.FC = () => {
   };
 
   return (
-    <div className="my-spots-container">
-      <h2 className="my-spots-heading">My Fishing Spots</h2>
-      <div className="my-spots-grid">
+    <div className={styles.mySpotsContainer}>
+      <h2 className={styles.mySpotsHeading}>My Fishing Spots</h2>
+      <div className={styles.mySpotsGrid}>
         {mySpots.map((spot) => (
           <div
             key={spot.post_id}
-            className="spot-card"
+            className={styles.spotCard}
             onClick={() => handleSinglePostPage(spot.post_id)}
           >
-            <img src={spot.photo_url} alt={spot.spot_name} />
-            <div className="spot-card-content">
-              <h3 className="spot-card-title">{spot.spot_name}</h3>
-              <p className="spot-card-description">{spot.description}</p>
-              <div className="spot-card-buttons">
+            <img src={spot.photo_url} alt={spot.spot_name} className={styles.spotCardImg} />
+            <div className={styles.spotCardContent}>
+              <h3 className={styles.spotCardTitle}>{spot.spot_name}</h3>
+              <p className={styles.spotCardDescription}>{spot.description}</p>
+              <div className={styles.spotCardButtons}>
                 <button
                   onClick={(e) => handleEdit(spot.post_id, e)}
-                  className="edit-btn"
+                  className={styles.editBtn}
                 >
                   Edit
                 </button>
                 <button
                   onClick={(e) => handleDelete(spot.post_id, e)}
-                  className="delete-btn"
+                  className={styles.deleteBtn}
                 >
                   Delete
                 </button>

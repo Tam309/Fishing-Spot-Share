@@ -12,6 +12,7 @@
   display: flex;
   align-items: flex-start;
   margin-bottom: 1rem;
+  position: relative;
 }
 
 .commentAvatar {
@@ -23,12 +24,7 @@
 
 .commentContent {
   flex-grow: 1;
-}
-
-.commentActions {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 0.5rem;
+  position: relative;
 }
 
 .commentText {
@@ -37,20 +33,29 @@
   border-radius: 6px;
 }
 
+.commentActions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+.commentActions span {
+  font-size: 12px;
+}
+
 .btnPrimary {
-  background-color: #007bff;
   border: none;
   padding: 10px 15px;
-  color: white;
+  color: black;
   cursor: pointer;
   border-radius: 4px;
 }
 
 .btnPrimary:hover {
-  background-color: #0056b3;
+  text-decoration: underline;
 }
 
-/* Add these styles for the comment form */
 .commentForm {
   display: flex;
   flex-direction: column;
@@ -154,4 +159,64 @@
 
 .single-post-fish-species svg {
   margin-right: 8px;
+}
+
+/* Dropdown Styles */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.threeDots {
+  cursor: pointer;
+  display: none;
+}
+
+.threeDots:hover {
+  background-color: #f1f1f1;
+  border: 10px;
+  border-radius: 50%;
+}
+
+.commentItem:hover .threeDots {
+  display: inline-block;
+}
+
+.dropdownMenu {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: #fff;
+  min-width: 100px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.dropdownActive .dropdownMenu {
+  display: block;
+}
+
+.dropdownMenu button {
+  background-color: white;
+  border: none;
+  color: black;
+  padding: 10px;
+  width: 100%;
+  text-align: left;
+  display: block;
+  cursor: pointer;
+}
+
+.dropdownMenu button:hover {
+  background-color: #f1f1f1;
+}
+
+/* Edit Comment Styles */
+.editTextarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }

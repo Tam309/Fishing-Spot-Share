@@ -43,7 +43,7 @@ postRouter.post("/posts/new", async (req, res) => {
 // Get all posts
 postRouter.get("/", async (req, res) => {
   try {
-    const sql = "select posts.*, users.nick_name from posts join users on posts.user_id = users.user_id";
+    const sql = "select posts.*, users.nick_name, users.avatar from posts join users on posts.user_id = users.user_id";
     const result = await query(sql);
     const rows = result.rows ? result.rows : [];
     res.status(200).json(rows);
@@ -159,5 +159,19 @@ postRouter.get("/posts/user/:user_id", async (req, res) => {
       res.status(500).json({ error: error.message });
     }
   });
+
+  // Get number of posts based on user id
+postRouter.get("/posts/user/:user_id/count", async (req, res) => {
+    const user_id = Number(req.params.user_id);
+    try {
+      const sql = `SELECT COUNT(post_id) FROM posts WHERE user_id = $1`;
+      const result = await query(sql, [user_id]);
+      const rows = result.rows ? result.rows : [];
+      res.status(200).json(rows[0]);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: error.message });
+    }
+  }); 
   
 module.exports = { postRouter };

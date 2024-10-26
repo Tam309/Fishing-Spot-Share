@@ -8,6 +8,7 @@ interface UserData {
   location: string;
   bio: string;
   avatar?: string; // Optional in case no profile picture is provided
+  post_count: number
 }
 
 interface ProfilePageProps {
@@ -81,7 +82,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ setIsLoggedIn }) => {
         <div className={styles.profileStats}>
           <div className={styles.profileStatCard}>
             <h4 className={styles.profileStatTitle}>Spots Uploaded</h4>
-            <p className={styles.profileStatNumber}>15</p> {/* Replace with dynamic data if available */}
+            <p className={styles.profileStatNumber}>{userData?.post_count}</p> {/* Replace with dynamic data if available */}
           </div>
           <div className={styles.profileStatCard}>
             <h4 className={styles.profileStatTitle}>Total Likes</h4>

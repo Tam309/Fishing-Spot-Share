@@ -1,0 +1,86 @@
+/* Container */
+.uploadContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+/* Title */
+.uploadTitle {
+  font-size: 1.875rem;
+  font-weight: bold;
+  margin-bottom: 24px;
+}
+
+/* Form */
+.uploadForm {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+}
+
+/* Input Fields */
+.uploadInput {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.uploadInput:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+}
+
+/* Textarea */
+.uploadTextarea {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+/* Upload Images */
+.uploadImageArea {
+  border: 2px dashed #9ca3af;
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.uploadImageArea p {
+  color: #4b5563;
+}
+
+/* Upload Button */
+.uploadButton {
+  width: 100%;
+  background-color: #2563eb;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.uploadButton:hover {
+  background-color: #1d4ed8;
+}
+
+/* Icon */
+.uploadIcon {
+  margin: 0 auto;
+  color: #9ca3af;
+  font-size: 3rem;
+  margin-bottom: 8px;
+}
+
+/* File Input (hidden) */
+.hiddenFileInput {
+  display: none;
+}

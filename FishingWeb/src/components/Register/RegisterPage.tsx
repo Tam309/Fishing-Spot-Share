@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import './RegisterPage.css'; // Import the CSS file
 import axios from 'axios';
+import styles from './RegisterPage.module.css';
 
-
-const RegisterPage = () => {
+const RegisterPage: React.FC = () => {
   const [username, setUsername] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -15,34 +14,31 @@ const RegisterPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    try{
+    try {
       const response = await axios.post('http://localhost:3001/register', {
         user_name: username,
-        email: email,
-        password: password
-    });
-    if(response.status === 200) {
-      console.log(response);
-      navigate('/login');
+        email,
+        password,
+      });
+      if (response.status === 200) {
+        navigate('/login');
+      }
+    } catch (error) {
+      console.log(error);
     }
-  } catch(error) {
-    console.log(error)
-  }
     if (password !== confirmPassword) {
       setError("Passwords do not match.");
       return;
     }
-    
   };
 
   return (
-    <div className="register-container">
-      <div className="register-card">
-        <h2 className="register-title">Register for FishSpot</h2>
-        {error && <p className="register-error">{error}</p>}
+    <div className={styles.registerContainer}>
+      <div className={styles.registerCard}>
+        <h2 className={styles.registerTitle}>Register for FishSpot</h2>
+        {error && <p className={styles.registerError}>{error}</p>}
         <form onSubmit={handleSubmit}>
-          {/* Username Field */}
-          <div className="mb-4">
+          <div>
             <label htmlFor="username" className="block text-gray-700 font-semibold mb-2">
               Username
             </label>
@@ -51,13 +47,12 @@ const RegisterPage = () => {
               id="username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="register-input"
+              className={styles.registerInput}
               placeholder="Enter your username"
               required
             />
           </div>
-          {/* Email Field */}
-          <div className="mb-4">
+          <div>
             <label htmlFor="email" className="block text-gray-700 font-semibold mb-2">
               Email
             </label>
@@ -66,13 +61,12 @@ const RegisterPage = () => {
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="register-input"
+              className={styles.registerInput}
               placeholder="Enter your email"
               required
             />
           </div>
-          {/* Password Field */}
-          <div className="mb-4">
+          <div>
             <label htmlFor="password" className="block text-gray-700 font-semibold mb-2">
               Password
             </label>
@@ -81,13 +75,12 @@ const RegisterPage = () => {
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="register-input"
+              className={styles.registerInput}
               placeholder="Enter your password"
               required
             />
           </div>
-          {/* Confirm Password Field */}
-          <div className="mb-6">
+          <div>
             <label htmlFor="confirmPassword" className="block text-gray-700 font-semibold mb-2">
               Confirm Password
             </label>
@@ -96,25 +89,18 @@ const RegisterPage = () => {
               id="confirmPassword"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="register-input"
+              className={styles.registerInput}
               placeholder="Re-enter your password"
               required
             />
           </div>
-          {/* Submit Button */}
-          <button
-            type="submit"
-            className="register-btn"
-          >
+          <button type="submit" className={styles.registerBtn}>
             Register
           </button>
         </form>
-        {/* Link to Login */}
-        <p className="register-link">
+        <p className={styles.registerLink}>
           Already have an account?{' '}
-          <Link to="/login">
-            Login here
-          </Link>
+          <Link to="/login">Login here</Link>
         </p>
       </div>
     </div>

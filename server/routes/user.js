@@ -91,16 +91,39 @@ userRouter.put("/users/password", async(req, res) => {
 
 //Get user's profile based on user_id
 userRouter.get("/users/:user_id", async (req, res) => {
+    const userId = req.params.user_id; // Get user_id from request parameters
     try {
-        const sql = "SELECT user_id, nick_name, location, bio, avatar FROM users WHERE user_id = $1";
-        const result = await query(sql, [req.params.user_id]);
-        const rows = result.rows ? result.rows : [];
-        res.status(200).json(rows[0]);
+        // Use parameterized query to prevent SQL injection
+        const sql = `
+            SELECT 
+                users.nick_name, 
+                users.bio, 
+                users.avatar, 
+                users.location, 
+                users.user_id, 
+                COUNT(posts.post_id) AS post_count
+            FROM users
+            LEFT JOIN posts ON users.user_id = posts.user_id
+            WHERE users.user_id = $1
+            GROUP BY users.user_id;
+        `;
+        
+        // Execute the query with the userId parameter
+        const result = await query(sql, [userId]);
+
+        // Send the response
+        const userData = result.rows && result.rows.length > 0 ? result.rows[0] : null;
+        if (userData) {
+            res.status(200).json(userData);
+        } else {
+            res.status(404).json({ message: "User not found" });
+        }
     } catch (error) {
-        console.log(error);
+        console.error("Error fetching user data:", error);
         res.status(500).json({ error: error.message });
     }
 });
+
 
 //Edit user's profile
 userRouter.put("/users/edit/:user_id", async (req, res) => {

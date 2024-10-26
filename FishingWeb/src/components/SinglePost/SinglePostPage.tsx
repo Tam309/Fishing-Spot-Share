@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import "./SinglePostPage.css"; // Create a new CSS file to style this page
+import styles from "./SinglePostPage.module.css";
 import { FaCommentAlt, FaFish, FaUser, FaCalendarAlt } from "react-icons/fa";
 
 // Define interface for the post data
@@ -10,15 +10,15 @@ interface MyPost {
   spot_name: string;
   description: string;
   photo_url: string;
-  user_name: string;
+  nick_name: string;
   saved: string;
   fish_type: string;
+  avatar: string;
 }
 
 const SinglePostPage: React.FC = () => {
   const [myPost, setMyPost] = useState<MyPost | null>(null);
   const { post_id } = useParams<{ post_id: string }>();
-
 
   const fetchPostData = async () => {
     try {
@@ -38,34 +38,38 @@ const SinglePostPage: React.FC = () => {
   }, []);
 
   if (!myPost) {
-    return <div>Loading...</div>; // Display loading while data is being fetched
+    return <div>Loading...</div>;
   }
 
-  // Render the post content using the fetched data
   return (
-    <div className="single-post-container">
-      <div className="single-post-image">
+    <div className={styles.singlePostContainer}>
+      <div className={styles.singlePostImage}>
         <img
           src={myPost.photo_url}
           alt={myPost.spot_name}
-          className="single-post-main-image"
+          className={styles.singlePostMainImage}
         />
       </div>
-      <div className="single-post-content">
-        <h1 className="single-post-title">{myPost.spot_name}</h1>
-        <div className="single-post-meta">
-          <span className="single-post-author">
-            <FaUser /> {myPost.user_name}
+      <div className={styles.singlePostContent}>
+        <h1 className={styles.singlePostTitle}>{myPost.spot_name}</h1>
+        <div className={styles.singlePostMeta}>
+          <span>
+            <img
+              src={myPost.avatar}
+              alt="Avatar"
+              className={styles.commentAvatar}
+            />
+            {myPost.nick_name}
           </span>
-          <span className="single-post-date">
+          <span>
             <FaCalendarAlt /> {myPost.saved.split("T")[0]}
           </span>
         </div>
-        <p className="single-post-description">{myPost.description}</p>
-        <div className="single-post-fish-species">
+        <p className={styles.singlePostDescription}>{myPost.description}</p>
+        <div className={styles.singlePostFishSpecies}>
           <FaFish /> {myPost.fish_type}
         </div>
-        <button className="single-post-discuss-btn">
+        <button className={styles.singlePostDiscussBtn}>
           <FaCommentAlt /> Discuss
         </button>
       </div>

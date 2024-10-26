@@ -46,47 +46,6 @@ const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* Featured Spots */}
-      <section className={styles.featuredSpotsSection}>
-        <h2>Popular Fishing Spots</h2>
-        <div className={styles.spotsGrid}>
-          <div className={styles.spotCard}>
-            <img src="https://placehold.co/400x300" alt="Spot 1" className={styles.spotImage} />
-            <h3>Golden Pond</h3>
-            <p>A tranquil spot for catching carp, bass, and more.</p>
-          </div>
-          <div className={styles.spotCard}>
-            <img src="https://placehold.co/400x300" alt="Spot 2" className={styles.spotImage} />
-            <h3>Silver Lake</h3>
-            <p>Perfect for a relaxing day of fishing in the mountains.</p>
-          </div>
-          <div className={styles.spotCard}>
-            <img src="https://placehold.co/400x300" alt="Spot 3" className={styles.spotImage} />
-            <h3>Crystal River</h3>
-            <p>Known for its variety of freshwater fish.</p>
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials Section */}
-      <section className={styles.testimonialsSection}>
-        <h2>What Our Users Say</h2>
-        <div className={styles.testimonialsGrid}>
-          <div className={styles.testimonialItem}>
-            <p>"FishSpot helped me discover the best hidden gems. I caught the biggest bass ever!"</p>
-            <span>- John Doe</span>
-          </div>
-          <div className={styles.testimonialItem}>
-            <p>"Thanks to FishSpot, I’ve met fellow anglers and we now plan our fishing trips together!"</p>
-            <span>- Alice Smith</span>
-          </div>
-          <div className={styles.testimonialItem}>
-            <p>"I’ve uploaded my favorite spots and received tons of tips from the community!"</p>
-            <span>- Robert Lee</span>
-          </div>
-        </div>
-      </section>
-
       {/* Footer */}
       <footer className={styles.footer}>
         <div className={styles.footerContent}>
