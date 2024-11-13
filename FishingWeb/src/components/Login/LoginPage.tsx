@@ -9,6 +9,7 @@ interface LoginPageProps {
 }
 
 const LoginPage: React.FC<LoginPageProps> = ({ setIsLoggedIn }) => {
+  const baseUrl = import.meta.env.VITE_BASE_URL
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [error, setError] = useState<string>('');
@@ -17,7 +18,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ setIsLoggedIn }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:3001/login", {
+      const response = await axios.post(`${baseUrl}/login`, {
         user_name: username,
         password: password
       });

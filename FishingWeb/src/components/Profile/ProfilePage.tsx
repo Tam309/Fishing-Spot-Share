@@ -17,6 +17,7 @@ interface ProfilePageProps {
 }
 
 const ProfilePage: React.FC<ProfilePageProps> = ({ setIsLoggedIn }) => {
+  const baseUrl = import.meta.env.VITE_BASE_URL
   const navigate = useNavigate();
   const [userData, setUserData] = useState<UserData | null>(null);
 
@@ -25,7 +26,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ setIsLoggedIn }) => {
     const user_id = localStorage.getItem("user_id");
     if (user_id) {
       try {
-        const response = await axios.get<UserData>(`http://localhost:3001/users/${user_id}`);
+        const response = await axios.get<UserData>(`${baseUrl}/users/${user_id}`);
         setUserData(response.data);
       } catch (error) {
         console.error("Failed to fetch user data:", error);

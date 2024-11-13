@@ -26,6 +26,7 @@ interface Comment {
 }
 
 const Discuss: React.FC = () => {
+  const baseUrl = import.meta.env.VITE_BASE_URL;
   const { post_id } = useParams<{ post_id: string }>();
   const loggedInUserId = Number(localStorage.getItem("user_id")); // Get the user_id from localStorage
   const [post, setPost] = useState<Post | null>(null);
@@ -42,7 +43,7 @@ const Discuss: React.FC = () => {
   useEffect(() => {
     const fetchPostData = async () => {
       try {
-        const response = await axios.get(`http://localhost:3001/posts/${post_id}`);
+        const response = await axios.get(`${baseUrl}/posts/${post_id}`);
         setPost(response.data);
       } catch (error) {
         setError("Failed to load post data");
@@ -57,7 +58,7 @@ const Discuss: React.FC = () => {
   useEffect(() => {
     const fetchComments = async () => {
       try {
-        const response = await axios.get(`http://localhost:3001/posts/${post_id}/comments`);
+        const response = await axios.get(`${baseUrl}/posts/${post_id}/comments`);
         setComments(response.data);
         console.log("Comments data:", response.data);
       } catch (error) {
@@ -69,7 +70,7 @@ const Discuss: React.FC = () => {
 
   const sendComment = async () => {
     try {
-      const response = await axios.post(`http://localhost:3001/posts/${post_id}/comments`, {
+      const response = await axios.post(`${baseUrl}/posts/${post_id}/comments`, {
         user_id: loggedInUserId,
         comment_content: userComment,
       });
@@ -102,7 +103,7 @@ const Discuss: React.FC = () => {
   const handleSaveEdit = async (index: number) => {
     // Send edited comment to server
     try {
-      await axios.put(`http://localhost:3001/posts/${post_id}/comments/${comments[index].comment_id}`, {
+      await axios.put(`${baseUrl}/posts/${post_id}/comments/${comments[index].comment_id}`, {
         comment_content: editComment,
       });
     } catch (error) {
@@ -117,7 +118,7 @@ const Discuss: React.FC = () => {
 
   const handleDeleteComment = async (index: number) => {
     try {
-      await axios.delete(`http://localhost:3001/posts/${post_id}/comments/${comments[index].comment_id}`);
+      await axios.delete(`${baseUrl}/posts/${post_id}/comments/${comments[index].comment_id}`);
     } catch (error) {
       console.error("Error deleting comment:", error);
     }

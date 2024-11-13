@@ -17,13 +17,14 @@ interface MyPost {
 }
 
 const SinglePostPage: React.FC = () => {
+  const baseUrl = import.meta.env.VITE_BASE_URL
   const [myPost, setMyPost] = useState<MyPost | null>(null);
   const { post_id } = useParams<{ post_id: string }>();
 
   const fetchPostData = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:3001/posts/${post_id}`
+        `${baseUrl}/posts/${post_id}`
       );
       const data = response.data;
       setMyPost(data);

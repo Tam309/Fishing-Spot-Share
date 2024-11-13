@@ -4,6 +4,7 @@ import { FaFish, FaMapMarkerAlt, FaUserFriends } from "react-icons/fa";
 import styles from "./LandingPage.module.css"; // CSS Module
 
 const LandingPage: React.FC = () => {
+  const baseUrl = import.meta.env.VITE_BASE_URL
   return (
     <div className={styles.landingPage}>
       {/* Hero Section */}

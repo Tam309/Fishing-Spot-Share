@@ -17,12 +17,13 @@ interface SharedSpot {
 }
 
 const SharedSpotsPage: React.FC = () => {
+  const baseUrl = import.meta.env.VITE_BASE_URL
   const [sharedSpots, setSharedSpots] = useState<SharedSpot[]>([]);
   const navigate = useNavigate();
 
   const fetchPost = async () => {
     try {
-      const response = await axios.get(`http://localhost:3001`);
+      const response = await axios.get(`${baseUrl}`);
       const data = response.data;
       setSharedSpots(data);
       console.log(data);

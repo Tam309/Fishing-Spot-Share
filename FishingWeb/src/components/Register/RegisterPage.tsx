@@ -13,9 +13,10 @@ const RegisterPage: React.FC = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
+    const baseUrl = import.meta.env.VITE_BASE_URL
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3001/register', {
+      const response = await axios.post(`${baseUrl}/register`, {
         user_name: username,
         email,
         password,

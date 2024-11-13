@@ -5,6 +5,7 @@ import { FaUpload } from "react-icons/fa";
 import styles from "./EditProfilePage.module.css";
 
 const EditProfilePage: React.FC = () => {
+  const baseUrl = import.meta.env.VITE_BASE_URL 
   // State to store form data
   const [nick_name, setName] = useState<string>("");
   const [location, setLocation] = useState<string>("");
@@ -26,7 +27,7 @@ const EditProfilePage: React.FC = () => {
   const fetchUserProfile = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:3001/users/${user_id}`
+        `${baseUrl}/users/${user_id}`
       );
       const data = response.data;
       console.log(data); // Check if data is being fetched correctly
@@ -80,7 +81,7 @@ const EditProfilePage: React.FC = () => {
   const updateUserProfile = async (avatarUrl: string | null) => {
     try {
       const response = await axios.put(
-        `http://localhost:3001/users/edit/${user_id}`,
+        `${baseUrl}/users/edit/${user_id}`,
         {
           nick_name: nick_name,
           location: location,

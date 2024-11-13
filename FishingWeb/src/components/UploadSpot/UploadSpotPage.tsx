@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import styles from './UploadSpotPage.module.css';
 
 const UploadSpotPage: React.FC = () => {
+  const baseUrl = import.meta.env.VITE_BASE_URL
   const user_id = localStorage.getItem("user_id");
   const [spot_name, setSpotName] = useState<string>("");
   const [location, setLocation] = useState<string>("");
@@ -80,7 +81,7 @@ const UploadSpotPage: React.FC = () => {
 
   const sendPostDataToServer = async (uploadedImageUrl: string) => {
     try {
-      await axios.post("http://localhost:3001/posts/new", {
+      await axios.post(`${baseUrl}/posts/new`, {
         user_id,
         spot_name,
         location,

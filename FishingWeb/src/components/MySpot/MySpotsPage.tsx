@@ -11,6 +11,7 @@ interface MySpot {
 }
 
 const MySpotsPage: React.FC = () => {
+  const baseUrl = import.meta.env.VITE_BASE_URL
   const [mySpots, setMySpots] = useState<MySpot[]>([]);
   const navigate = useNavigate();
   const user_id = localStorage.getItem("user_id");
@@ -18,7 +19,7 @@ const MySpotsPage: React.FC = () => {
   // Fetch user's posts
   const fetchPostData = async () => {
     try {
-      const response = await axios.get(`http://localhost:3001/posts/user/${user_id}`);
+      const response = await axios.get(`${baseUrl}/posts/user/${user_id}`);
       setMySpots(response.data);
     } catch (error) {
       console.log("Error fetching posts:", error);
@@ -38,7 +39,7 @@ const MySpotsPage: React.FC = () => {
   const handleDelete = async (id: number, e: React.MouseEvent) => {
     e.stopPropagation();
     try {
-      const response = await axios.delete(`http://localhost:3001/posts/${id}`);
+      const response = await axios.delete(`${baseUrl}/posts/${id}`);
       setMySpots((prevSpots) => prevSpots.filter((spot) => spot.post_id !== id));
     } catch (error) {
       console.log(error);
