@@ -170,12 +170,12 @@ const UploadSpotPage: React.FC = () => {
             <label htmlFor="uploadImages" className="cursor-pointer">
               Select Image
             </label>
-          </div>
           {imagePreview && (
             <div className={styles.imagePreview}>
               <img src={imagePreview} alt="Selected" className={styles.selectedImage} />
             </div>
           )}
+          </div>
         </div>
         <button type="submit" className={styles.uploadButton} disabled={uploading}>
           {uploading ? "Uploading..." : "Upload Spot"}

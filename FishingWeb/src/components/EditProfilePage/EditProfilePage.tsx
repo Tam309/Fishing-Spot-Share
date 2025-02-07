@@ -14,6 +14,7 @@ const EditProfilePage: React.FC = () => {
   const [avatar, setAvatar] = useState<string>("");
   const [uploading, setUploading] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false); // New loading state
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const user_id = localStorage.getItem("user_id");
 
   const navigate = useNavigate();
@@ -46,10 +47,19 @@ const EditProfilePage: React.FC = () => {
   }, []); // Fetch user profile on component mount
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      setInputFile(e.target.files[0]);
-    }
-  };
+  if (e.target.files && e.target.files.length > 0) {
+    const file = e.target.files[0];
+    console.log("Selected file:", file);
+    setInputFile(file);
+    const fileReader = new FileReader();
+    fileReader.onloadend = () => {
+      console.log("File preview generated:", fileReader.result);
+      setImagePreview(fileReader.result as string);
+    };
+    fileReader.readAsDataURL(file);
+  }
+};
+
 
   // Send picture to Cloudinary
   const uploadImgToCloudinary = async (): Promise<string | null> => {
@@ -173,6 +183,11 @@ const EditProfilePage: React.FC = () => {
             <label htmlFor="uploadImages" className="cursor-pointer">
               Select Image
             </label>
+            {imagePreview && (
+            <div className={styles.imagePreview}>
+              <img src={imagePreview} alt="Selected" className={styles.selectedImage} />
+            </div>
+          )}
           </div>
         </div>
         <div className={styles.actions}>

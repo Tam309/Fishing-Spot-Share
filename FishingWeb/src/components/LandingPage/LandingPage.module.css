@@ -67,6 +67,7 @@
   text-align: center;
   flex: 1 1 200px; /* Makes each item take equal width and allows resizing */
   max-width: 220px; /* Ensures the items don't get too wide */
+  margin: 0 auto; /* Centers the items */
 }
 
 

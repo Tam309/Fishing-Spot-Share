@@ -84,3 +84,18 @@
 .hiddenFileInput {
   display: none;
 }
+
+/* Image Preview */
+.imagePreview {
+  margin-top: 16px;
+  text-align: center;
+}
+
+.selectedImage {
+  width: 100%;
+  max-width: 500px;
+  border-radius: 8px;
+  display: block;
+  margin: 0 auto;
+  margin-bottom: 16px;
+}

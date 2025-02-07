@@ -109,3 +109,11 @@ h1 {
   font-weight: bold;
   margin-bottom: 0.5rem;
 }
+
+.selectedImage {
+  width: 100%;
+  max-width: 500px;
+  border-radius: 8px;
+  display: block;
+  margin: 0 auto;
+}

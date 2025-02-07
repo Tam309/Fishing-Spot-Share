@@ -159,6 +159,7 @@ postRouter.get("/", async (req, res) => {
 postRouter.delete("/posts/:post_id", async (req, res) => {
   const post_id = parseInt(req.params.post_id);
   try {
+    await query("DELETE FROM comments WHERE post_id = $1", [post_id]);
     const sql = "DELETE FROM posts WHERE post_id = $1";
     const result = await query(sql, [post_id]);
     res.status(200).json({ message: "Post deleted" });

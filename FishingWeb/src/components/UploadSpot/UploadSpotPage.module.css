@@ -92,6 +92,9 @@
 
 .selectedImage {
   width: 100%;
-  max-width: 300px;
+  max-width: 500px;
   border-radius: 8px;
+  display: block;
+  margin: 0 auto;
+  margin-bottom: 16px;
 }

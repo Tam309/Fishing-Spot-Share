@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useState, useEffect } from "react";
 import { FaUpload } from "react-icons/fa";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import styles from "./EditPostPage.module.css";
 
 const EditPostPage: React.FC = () => {
@@ -15,6 +15,9 @@ const EditPostPage: React.FC = () => {
   const [inputFile, setInputFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState<boolean>(false);
   const [publicId, setPublicId] = useState<String>("");
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Fetch the current post details to pre-fill the form
@@ -62,6 +65,11 @@ const EditPostPage: React.FC = () => {
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       setInputFile(e.target.files[0]); // Store the selected file
+      const fileReader = new FileReader();
+      fileReader.onloadend = () => {
+        setImagePreview(fileReader.result as string);
+      };
+      fileReader.readAsDataURL(e.target.files[0]);
     }
   };
 
@@ -149,7 +157,7 @@ const EditPostPage: React.FC = () => {
         }
       );
       console.log(response.data);
-      alert("Post updated successfully");
+      navigate("/mySpots");
     } catch (error) {
       console.error("There was an error updating the post!", error);
     }
@@ -234,6 +242,11 @@ const EditPostPage: React.FC = () => {
             <label htmlFor="uploadImages" className="cursor-pointer">
               Select File
             </label>
+            {imagePreview && (
+            <div className={styles.imagePreview}>
+              <img src={imagePreview} alt="Selected" className={styles.selectedImage} />
+            </div>
+          )}
           </div>
         </div>
         {/* Submit Button */}
