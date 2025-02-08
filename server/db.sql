@@ -3,6 +3,10 @@ create table users (
     user_name varchar(100) unique not null,
     email varchar(100) unique not null,
     password varchar(255) not null,
+    avatar varchar(255),
+    bio varchar(100),
+    location varchar(50),
+    nick_name varchar(50)
     
 ) CREATE TABLE posts (
     post_id serial primary key,
