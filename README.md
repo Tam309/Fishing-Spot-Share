@@ -19,7 +19,7 @@ FishSpot is a social website where users can share their favorite fishing spots,
 
 1. **Frontend**: TypeScript, React, React Router, Axios (for API requests)
 2. **Backend**: Node.js, Express.js, PostgreSQL (for database operations)
-3. **API Documentation**: Swagger (Swagger docs available at https://lemon-water-04623f503.4.azurestaticapps.net/api-docs)
+3. **API Documentation**: Swagger (Swagger docs available at https://fishing-spot-backend-fegydeb0a4fpc6hs.germanywestcentral-01.azurewebsites.net/api-docs/)
 
 ---
 
