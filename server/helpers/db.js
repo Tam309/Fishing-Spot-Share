@@ -1,5 +1,8 @@
-require('dotenv').config()
-const { Pool } = require('pg');
+import dotenv from 'dotenv';
+import pkg from 'pg';
+
+const { Pool } = pkg;
+dotenv.config();
 
 const query = (sql, values = []) => {
     return new Promise(async(resolve, reject) => {
@@ -25,4 +28,4 @@ const openDb = () => {
     return pool
 }
 
-module.exports = { query }
+export { query }

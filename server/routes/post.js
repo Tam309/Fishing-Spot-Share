@@ -1,5 +1,5 @@
-const express = require("express");
-const { query } = require("../helpers/db");
+import express from "express";
+import { query } from "../helpers/db.js";
 
 const postRouter = express.Router();
 
@@ -417,4 +417,4 @@ postRouter.get("/posts/user/:user_id/count", async (req, res) => {
   }
 });
 
-module.exports = { postRouter };
+export { postRouter };

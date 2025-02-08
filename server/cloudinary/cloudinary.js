@@ -1,5 +1,5 @@
-const express = require("express")
-const cloudinary = require("cloudinary").v2;
+import express from "express";
+import { v2 as cloudinary } from "cloudinary";
 const cloudinaryRouter = express.Router();
 
 cloudinary.config({
@@ -9,4 +9,4 @@ cloudinary.config({
     cloud_url: process.env.CLOUDINARY_URL
 })
 
-module.exports = { cloudinaryRouter };
+export { cloudinaryRouter };

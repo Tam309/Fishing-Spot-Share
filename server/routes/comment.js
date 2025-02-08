@@ -1,5 +1,5 @@
-const express = require("express");
-const { query } = require("../helpers/db.js");
+import express from "express";
+import { query } from "../helpers/db.js";
 
 const commentRouter = express.Router();
 
@@ -234,4 +234,4 @@ commentRouter.delete(
   }
 );
 
-module.exports = { commentRouter };
+export { commentRouter };

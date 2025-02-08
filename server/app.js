@@ -1,13 +1,15 @@
-require('dotenv').config()
-const express = require('express')
-const cors = require('cors')
-const bodyParser = require('body-parser');
-const swaggerDocs = require('./swagger');
+import dotenv from 'dotenv';
+import express from 'express';
+import cors from 'cors';
+import bodyParser from 'body-parser';
+import swaggerDocs from './swagger.js';
 
-const { userRouter } = require('./routes/user.js');
-const { cloudinaryRouter } = require('./cloudinary/cloudinary.js')
-const { postRouter } = require('./routes/post.js')
-const { commentRouter } = require('./routes/comment.js')
+import { userRouter } from './routes/user.js'
+import { cloudinaryRouter } from './cloudinary/cloudinary.js';
+import { postRouter } from './routes/post.js';
+import { commentRouter } from './routes/comment.js';
+
+dotenv.config();
 
 const app = express()
 app.use(cors({

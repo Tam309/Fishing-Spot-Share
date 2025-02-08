@@ -1,8 +1,25 @@
-const express = require("express");
-const { query } = require("../helpers/db.js");
-const bcrypt = require("bcrypt");
+import express from "express";
+import { query } from "../helpers/db.js";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import passport from "passport";
+import { Strategy as JwtStrategy, ExtractJwt as extractJwt } from "passport-jwt";
+
 
 const userRouter = express.Router();
+
+// const secretKey = process.env.SECRETKEY
+// const jwtOptions = {}
+// jwtOptions.jwtFromRequest = extractJwt.fromAuthHeaderAsBearerToken();
+// jwtOptions.secretOrKey = secretKey;
+
+// // Middleware for authorization
+// passport.use(
+//   new JwtStrategy(jwtOptions, function (jwt_payload, done) {
+//     console.log("payload received", jwt_payload);
+//     done(null, jwt_payload);
+//   })
+// )
 
 /**
  * @swagger
@@ -122,6 +139,7 @@ userRouter.post("/login", async (req, res) => {
             console.log(bcrypt_res);
             if (bcrypt_res === true) {
               const user = result.rows[0];
+
               res.status(200).json({
                 user_id: user.user_id,
                 email: user.email,
@@ -377,4 +395,4 @@ userRouter.get("/users/avatar/:user_id", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-module.exports = { userRouter };
+export { userRouter };
