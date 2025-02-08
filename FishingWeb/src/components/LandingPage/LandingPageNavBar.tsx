@@ -18,7 +18,7 @@ const LandingPageNavBar: React.FC = () => {
             <>
               {/* Login/Logout button */}
               <Link to="/profile" className="hover:text-blue-200">
-                Login
+                Profile
               </Link>
             </>
           ) : (
@@ -33,6 +33,21 @@ const LandingPageNavBar: React.FC = () => {
           </button>
         </div>
       </div>
+
+      {/* Mobile Menu (conditional rendering based on isMenuOpen state) */}
+      {isMenuOpen && (
+        <div className="md:hidden bg-blue-700 p-4 space-y-4">
+          {isLoggedIn ? (
+            <Link to="/profile" className="block text-white hover:text-blue-200">
+              Profile
+            </Link>
+          ) : (
+            <Link to="/login" className="block text-white hover:text-blue-200">
+              Login
+            </Link>
+          )}
+        </div>
+      )}
     </nav>
   );
 };
