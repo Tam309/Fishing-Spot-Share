@@ -1,0 +1,17 @@
+{
+    "routes": [
+      {
+        "route": "/login",
+        "rewrite": "/index.html"
+      },
+      {
+        "route": "/{*all}",
+        "rewrite": "/index.html"
+      }
+    ],
+    "navigationFallback": {
+      "rewrite": "/index.html",
+      "statusCode": 200
+    }
+  }
+  
