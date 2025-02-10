@@ -85,10 +85,10 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ setIsLoggedIn }) => {
             <h4 className={styles.profileStatTitle}>Spots Uploaded</h4>
             <p className={styles.profileStatNumber}>{userData?.post_count}</p> {/* Replace with dynamic data if available */}
           </div>
-          <div className={styles.profileStatCard}>
+          {/* <div className={styles.profileStatCard}>
             <h4 className={styles.profileStatTitle}>Total Likes</h4>
-            <p className={styles.profileStatNumber}>127</p> {/* Replace with dynamic data if available */}
-          </div>
+            <p className={styles.profileStatNumber}>127</p> 
+          </div> */}
         </div>
         {/* Logout Button */}
         <button onClick={onLogout} className={styles.logoutBtn}>
