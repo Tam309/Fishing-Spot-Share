@@ -4,6 +4,8 @@
 
 FishSpot is a social website where users can share their favorite fishing spots, interact with posts shared by others, like and comment on them, and discover new locations.
 
+**Link to live application**: (https://lemon-water-04623f503.4.azurestaticapps.net)
+
 ---
 
 # **Feature**
