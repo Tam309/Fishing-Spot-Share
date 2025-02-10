@@ -1,17 +1,6 @@
 {
-  "routes": [
-    {
-      "route": "/login",
-      "rewrite": "/index.html"
-    },
-    {
-      "route": "/{*all}",
-      "rewrite": "/index.html"
-    }
-  ],
   "navigationFallback": {
-    "rewrite": "/index.html",
-    "exclude": ["/static/*", "/images/*", "*.js", "*.css", "*.json", "*.ico", "*.png", "*.jpg", "*.svg"],
-    "statusCode": 200
+    "rewrite": "index.html",
+    "exclude": ["/images/*.{png,jpg,gif,ico}", "/*.{css,scss,js}"]
   }
 }
