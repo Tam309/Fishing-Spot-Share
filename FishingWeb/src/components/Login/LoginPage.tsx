@@ -18,15 +18,16 @@ const LoginPage: React.FC<LoginPageProps> = ({ setIsLoggedIn }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${baseUrl}/login`, {
-        user_name: username,
+      const response = await axios.post(`${baseUrl}/users/login`, {
+        username: username,
         password: password
       });
       if(response.status === 200) {
-        const user_id = response.data.user_id;
-        localStorage.setItem("user_id", user_id.toString());
+        const token = response.data.token;
+        localStorage.setItem("token", token.toString());
         localStorage.setItem("loggedIn", "true");
-        setIsLoggedIn(true); // Update login state
+        localStorage.setItem("id", response.data.userId.toString());
+        setIsLoggedIn(true); 
         navigate('/home');
       }
     } catch (error) {

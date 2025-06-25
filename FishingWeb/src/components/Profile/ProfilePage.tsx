@@ -8,7 +8,8 @@ interface UserData {
   location: string;
   bio: string;
   avatar?: string; // Optional in case no profile picture is provided
-  post_count: number
+  postCount: number
+  username: string;
 }
 
 interface ProfilePageProps {
@@ -20,13 +21,18 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ setIsLoggedIn }) => {
   const baseUrl = import.meta.env.VITE_BASE_URL
   const navigate = useNavigate();
   const [userData, setUserData] = useState<UserData | null>(null);
+  
 
   // Fetch user's data from backend
   const fetchUserData = async () => {
-    const user_id = localStorage.getItem("user_id");
-    if (user_id) {
+    const token = localStorage.getItem("token");
+    if (token) {
       try {
-        const response = await axios.get<UserData>(`${baseUrl}/users/${user_id}`);
+        const response = await axios.get<UserData>(`${baseUrl}/users/profile`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         setUserData(response.data);
       } catch (error) {
         console.error("Failed to fetch user data:", error);
@@ -39,7 +45,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ setIsLoggedIn }) => {
   }, []);
 
   const onLogout = () => {
-    localStorage.removeItem("user_id");
+    localStorage.removeItem("token");
     localStorage.removeItem("loggedIn");
     setIsLoggedIn(false);
     navigate('/');
@@ -56,13 +62,13 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ setIsLoggedIn }) => {
         <div className={styles.profileHeader}>
           <div className={styles.profileInfo}>
             <img
-              src={userData?.avatar || '/path/to/default-avatar.png'} // Placeholder avatar if no profile picture
+              src={userData?.avatar || '/path/to/default-avatar.png'} 
               alt="Profile"
               className={styles.profileAvatar}
             />
             <div>
               <h2 className={styles.profileUsername}>
-                Welcome, {userData?.nick_name || "User"}!
+                Welcome, {userData?.nick_name || userData?.username}!
               </h2>
               <p className={styles.profileLocation}>{userData?.location || "Unknown Location"}</p>
             </div>
@@ -83,7 +89,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ setIsLoggedIn }) => {
         <div className={styles.profileStats}>
           <div className={styles.profileStatCard}>
             <h4 className={styles.profileStatTitle}>Spots Uploaded</h4>
-            <p className={styles.profileStatNumber}>{userData?.post_count}</p> {/* Replace with dynamic data if available */}
+            <p className={styles.profileStatNumber}>{userData?.postCount}</p> {/* Replace with dynamic data if available */}
           </div>
           {/* <div className={styles.profileStatCard}>
             <h4 className={styles.profileStatTitle}>Total Likes</h4>

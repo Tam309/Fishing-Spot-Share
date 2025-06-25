@@ -19,8 +19,12 @@ const MySpotsPage: React.FC = () => {
   // Fetch user's posts
   const fetchPostData = async () => {
     try {
-      const response = await axios.get(`${baseUrl}/posts/user/${user_id}`);
-      setMySpots(response.data);
+      const response = await axios.get(`${baseUrl}/posts/user`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      setMySpots(response.data.posts);
     } catch (error) {
       console.log("Error fetching posts:", error);
     }
@@ -39,7 +43,11 @@ const MySpotsPage: React.FC = () => {
   const handleDelete = async (id: number, e: React.MouseEvent) => {
     e.stopPropagation();
     try {
-      const response = await axios.delete(`${baseUrl}/posts/${id}`);
+      const response = await axios.delete(`${baseUrl}/posts/${id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
       setMySpots((prevSpots) => prevSpots.filter((spot) => spot.post_id !== id));
     } catch (error) {
       console.log(error);

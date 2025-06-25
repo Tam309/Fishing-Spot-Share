@@ -14,14 +14,15 @@ const RegisterPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     const baseUrl = import.meta.env.VITE_BASE_URL
+    console.log(baseUrl);
     e.preventDefault();
     try {
-      const response = await axios.post(`${baseUrl}/register`, {
-        user_name: username,
+      const response = await axios.post(`${baseUrl}/users/register`, {
+        username: username,
         email,
         password,
       });
-      if (response.status === 200) {
+      if (response.status === 201) {
         navigate('/login');
       }
     } catch (error) {

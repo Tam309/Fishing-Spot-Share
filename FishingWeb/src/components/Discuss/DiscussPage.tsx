@@ -16,19 +16,17 @@ interface Post {
 }
 
 interface Comment {
-  comment_id: number;
+  comment_id: string;
   comment_content: string;
   avatar: string;
   nick_name: string;
   saved: string;
-  user_id: number;
-  // Ensuring user_id is a string here for comparison
+  user_id: string;
 }
 
 const Discuss: React.FC = () => {
   const baseUrl = import.meta.env.VITE_BASE_URL;
   const { post_id } = useParams<{ post_id: string }>();
-  const loggedInUserId = Number(localStorage.getItem("user_id")); // Get the user_id from localStorage
   const [post, setPost] = useState<Post | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -36,15 +34,19 @@ const Discuss: React.FC = () => {
   const [comments, setComments] = useState<Comment[]>([]);
   const [userComment, setUserComment] = useState<string>("");
   const [editComment, setEditComment] = useState<string>("");
-
-  // New state to track which comment's dropdown is open
   const [openDropdown, setOpenDropdown] = useState<number | null>(null);
+  const userId = localStorage.getItem("id");
 
   useEffect(() => {
     const fetchPostData = async () => {
       try {
-        const response = await axios.get(`${baseUrl}/posts/${post_id}`);
-        setPost(response.data);
+        const response = await axios.get(`${baseUrl}/posts/${post_id}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        const data = response.data.post;
+        setPost(data);
       } catch (error) {
         setError("Failed to load post data");
         console.error("Error fetching post data:", error);
@@ -58,9 +60,21 @@ const Discuss: React.FC = () => {
   useEffect(() => {
     const fetchComments = async () => {
       try {
-        const response = await axios.get(`${baseUrl}/posts/${post_id}/comments`);
-        setComments(response.data);
-        console.log("Comments data:", response.data);
+        const response = await axios.get(`${baseUrl}/comments/${post_id}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        const formattedData = response.data.comments.map((comment: any) => ({
+          comment_id: comment._id,
+          comment_content: comment.content,
+          avatar: comment.user_id.avatar || "https://via.placeholder.com/150",
+          nick_name: comment.user_id.nick_name || comment.user_id.username,
+          saved: comment.createdAt.split("T")[0],
+          user_id: comment.user_id._id,
+        }));
+        setComments(formattedData);
+        console.log("Comments data:", response.data.comments);
       } catch (error) {
         console.error("Error fetching comments data:", error);
       }
@@ -70,17 +84,30 @@ const Discuss: React.FC = () => {
 
   const sendComment = async () => {
     try {
-      const response = await axios.post(`${baseUrl}/posts/${post_id}/comments`, {
-        user_id: loggedInUserId,
-        comment_content: userComment,
-      });
+      const response = await axios.post(
+        `${baseUrl}/comments`,
+        {
+          postId: post_id,
+          content: userComment,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      const data = response.data.comment;
+      const newComment = {
+        comment_id: data._id,
+        comment_content: data.content,
+        avatar: data.avatar || "https://via.placeholder.com/150",
+        nick_name: data.nick_name || data.username || "Anonymous",
+        saved: data.createdAt.split("T")[0],
+        user_id: data.user_id,
+      };
 
-      // Add the full response data (with comment_id) to the comments array
-      setComments((prevComments) => [...prevComments, {
-        ...response.data,
-        user_id: loggedInUserId, // Ensure user_id is included
-      }]);
-      setUserComment("");  // Clear the comment input
+      setComments((prevComments) => [...prevComments, newComment]);
+      setUserComment("");
     } catch (error) {
       console.error("Error posting comment:", error);
     }
@@ -92,20 +119,24 @@ const Discuss: React.FC = () => {
   };
 
   const handleEditComment = (index: number) => {
-    if (comments[index].user_id !== loggedInUserId) {
-      alert("You can't edit another user's comment.");
-      return;
-    }
     setIsEditing(index);
     setEditComment(comments[index].comment_content);
+    setOpenDropdown(null);
   };
 
   const handleSaveEdit = async (index: number) => {
-    // Send edited comment to server
     try {
-      await axios.put(`${baseUrl}/posts/${post_id}/comments/${comments[index].comment_id}`, {
-        comment_content: editComment,
-      });
+      await axios.put(
+        `${baseUrl}/comments/${comments[index].comment_id}`,
+        {
+          content: editComment,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
     } catch (error) {
       console.error("Error editing comment:", error);
     }
@@ -114,20 +145,32 @@ const Discuss: React.FC = () => {
     );
     setComments(updatedComments);
     setIsEditing(null);
+    setOpenDropdown(null);
   };
 
   const handleDeleteComment = async (index: number) => {
     try {
-      await axios.delete(`${baseUrl}/posts/${post_id}/comments/${comments[index].comment_id}`);
-    } catch (error) {
-      console.error("Error deleting comment:", error);
+      const response = await axios.delete(
+        `${baseUrl}/comments/${comments[index].comment_id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      if (response.status === 200) {
+        const updatedComments = comments.filter((_, i) => i !== index);
+        setComments(updatedComments);
+      }
+    } catch (error: any) {
+      if (error.response && error.response.status === 400) {
+        alert("You can only delete your own comments.");
+      } else {
+        console.error("Error deleting comment:", error);
+      }
+    } finally {
+      setOpenDropdown(null);
     }
-    if (comments[index].user_id !== loggedInUserId) {
-      alert("You can't delete another user's comment.");
-      return;
-    }
-    const updatedComments = comments.filter((_, i) => i !== index);
-    setComments(updatedComments);
   };
 
   const handleDropDownClick = (index: number) => {
@@ -142,20 +185,34 @@ const Discuss: React.FC = () => {
       {post && (
         <div className={styles["single-post-container"]}>
           <div className={styles["single-post-image"]}>
-            <img src={post.photo_url} alt={post.spot_name} className={styles["single-post-main-image"]} />
+            <img
+              src={post.photo_url}
+              alt={post.spot_name}
+              className={styles["single-post-main-image"]}
+            />
           </div>
           <div className={styles["single-post-content"]}>
             <h1 className={styles["single-post-title"]}>{post.spot_name}</h1>
             <div className={styles["single-post-meta"]}>
               <span className={styles["single-post-author"]}>
-                <img src={post.avatar} alt="Avatar" className={styles.commentAvatar} />
+                <img
+                  src={post.avatar}
+                  alt="Avatar"
+                  className={styles.commentAvatar}
+                />
                 {post.nick_name}
               </span>
               <span className={styles["single-post-date"]}>
-                {post.saved && <><FaCalendarAlt /> {post.saved.split("T")[0]}</>}
+                {post.saved && (
+                  <>
+                    <FaCalendarAlt /> {post.saved.split("T")[0]}
+                  </>
+                )}
               </span>
             </div>
-            <p className={styles["single-post-description"]}>{post.description}</p>
+            <p className={styles["single-post-description"]}>
+              {post.description}
+            </p>
             <div className={styles["single-post-fish-species"]}>
               <FaFish /> {post.fish_type || "No fish types available"}
             </div>
@@ -165,7 +222,14 @@ const Discuss: React.FC = () => {
       <div className={styles.comments}>
         {comments.map((comment, index) => (
           <div key={index} className={styles.commentItem}>
-            <img src={comment.avatar} alt="Avatar" className={styles.commentAvatar} />
+            <div className={styles.commentHeader}>
+              <div className={styles.commentName}>{comment.nick_name}</div>
+              <img
+                src={comment.avatar}
+                alt="Avatar"
+                className={styles.commentAvatar}
+              />
+            </div>
             <div className={styles.commentContent}>
               {isEditing === index ? (
                 <div>
@@ -175,8 +239,17 @@ const Discuss: React.FC = () => {
                     rows={3}
                     className={styles.editTextarea}
                   />
-                  <button className={styles.btnPrimary} onClick={() => handleSaveEdit(index)}>
+                  <button
+                    className={styles.btnPrimary}
+                    onClick={() => handleSaveEdit(index)}
+                  >
                     Save
+                  </button>
+                  <button
+                    className={styles.btnSecondary}
+                    onClick={() => setIsEditing(null)}
+                  >
+                    Cancel
                   </button>
                 </div>
               ) : (
@@ -184,13 +257,26 @@ const Discuss: React.FC = () => {
               )}
               <div className={styles.commentActions}>
                 <span>{comment.saved}</span>
-                <div className={`${styles.dropdown} ${openDropdown === index ? styles.dropdownActive : ""}`}>
-                  <BsThreeDots className={styles.threeDots} onClick={() => handleDropDownClick(index)} />
-                  <div className={styles.dropdownMenu}>
-                    <button onClick={() => handleEditComment(index)}>Edit</button>
-                    <button onClick={() => handleDeleteComment(index)}>Delete</button>
+                {comment.user_id === userId && ( // Only show dropdown for the author
+                  <div
+                    className={`${styles.dropdown} ${
+                      openDropdown === index ? styles.dropdownActive : ""
+                    }`}
+                  >
+                    <BsThreeDots
+                      className={styles.threeDots}
+                      onClick={() => handleDropDownClick(index)}
+                    />
+                    <div className={styles.dropdownMenu}>
+                      <button onClick={() => handleEditComment(index)}>
+                        Edit
+                      </button>
+                      <button onClick={() => handleDeleteComment(index)}>
+                        Delete
+                      </button>
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             </div>
           </div>

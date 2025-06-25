@@ -24,15 +24,18 @@ const EditPostPage: React.FC = () => {
     const fetchPostData = async () => {
       try {
         const response = await axios.get(
-          `${baseUrl}/posts/${post_id}`
+          `${baseUrl}/posts/${post_id}`, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            }
+          }
         );
-        const { spot_name, location, description, fish_type, photo_url } =
-          response.data;
+        const { spot_name, location, description, fish_type, photo_url } = response.data.post;
         setSpotName(spot_name);
         setLocation(location);
         setDescription(description);
         setFishSpecies(fish_type);
-        setPhoto_url(photo_url); // Pre-fill with current image URL
+        setPhoto_url(photo_url); 
       } catch (error) {
         console.error("Error fetching post data:", error);
       }
@@ -99,7 +102,7 @@ const EditPostPage: React.FC = () => {
           type: 'upload' // Use 'upload' for images uploaded to the default upload folder
         },
         headers: {
-          Authorization: `Bearer 918745228234335`, // Replace with your actual API key
+          Authorization: `Bearer 918745228234335`, 
         },
       });
       console.log("Image deleted successfully");
@@ -111,22 +114,28 @@ const EditPostPage: React.FC = () => {
   
 
   const uploadImgToCloudinary = async (): Promise<string | null> => {
-    if (!inputFile) return null; // If no new image is selected, return null
+    if (!inputFile) return null; 
 
     const formData = new FormData();
-    formData.append("file", inputFile);
-    formData.append("upload_preset", "yxk5zsh4");
+    formData.append("image", inputFile);
+    formData.append("folder", "fish spot");
 
     try {
       setUploading(true);
       const response = await axios.post(
-        "https://api.cloudinary.com/v1_1/dstq5xce2/image/upload",
-        formData
+        `${baseUrl}/cloudinary/upload`, 
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`, 
+            "Content-Type": "multipart/form-data", 
+          },
+        }
       );
       setUploading(false);
-      setPhoto_url(response.data.secure_url); // Update the state with the new image URL
-      console.log("Image uploaded: ", response.data.secure_url);
-      return response.data.secure_url; // Return the new image URL
+      setPhoto_url(response.data.url); 
+      console.log("Image uploaded: ", response.data.url);
+      return response.data.url; 
     } catch (error) {
       setUploading(false);
       console.error("Error uploading image: ", error);
@@ -153,11 +162,19 @@ const EditPostPage: React.FC = () => {
           location,
           description,
           fish_type,
-          photo_url: finalPhotoUrl, // Use the correct image URL (new or existing)
+          image: finalPhotoUrl, 
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          }
         }
       );
-      console.log(response.data);
-      navigate("/mySpots");
+      if(response.status === 200) {
+        console.log(response.data);
+        navigate("/mySpots");
+      }
+      
     } catch (error) {
       console.error("There was an error updating the post!", error);
     }

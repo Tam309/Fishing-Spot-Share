@@ -1,16 +1,19 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { BiMenu } from "react-icons/bi";
+import { FaUser } from "react-icons/fa";
 
 const LandingPageNavBar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-
+  const isLoggedIn = localStorage.getItem("loggedIn") === "true";
   return (
     <nav className="bg-blue-600 p-4 text-white fixed w-full top-0 z-50">
       <div className="container mx-auto flex justify-between items-center">
         {/* Logo */}
-        <h1 className="text-2xl text-white font-bold">FishSpot</h1>
+        <Link to="/home">
+          <h1 className="text-2xl text-white font-bold">FishSpot</h1>
+        </Link>
+
 
         {/* Remove other navigation links */}
         <div className="hidden md:flex space-x-4">
@@ -18,7 +21,7 @@ const LandingPageNavBar: React.FC = () => {
             <>
               {/* Login/Logout button */}
               <Link to="/profile" className="hover:text-blue-200">
-                Profile
+                <FaUser className="inline mr-1" />
               </Link>
             </>
           ) : (
@@ -39,7 +42,7 @@ const LandingPageNavBar: React.FC = () => {
         <div className="md:hidden bg-blue-700 p-4 space-y-4">
           {isLoggedIn ? (
             <Link to="/profile" className="block text-white hover:text-blue-200">
-              Profile
+              <FaUser className="inline mr-1" />
             </Link>
           ) : (
             <Link to="/login" className="block text-white hover:text-blue-200">

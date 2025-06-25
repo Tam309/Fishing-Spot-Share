@@ -59,19 +59,25 @@ const UploadSpotPage: React.FC = () => {
     }
 
     const formData = new FormData();
-    formData.append("file", inputFile);
-    formData.append("upload_preset", "yxk5zsh4");
+    formData.append("image", inputFile);
+    formData.append("folder", "fish spot");
 
     try {
       setUploading(true);
       const response = await axios.post(
-        "https://api.cloudinary.com/v1_1/dstq5xce2/image/upload",
-        formData
+        `${baseUrl}/cloudinary/upload`, 
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`, 
+            "Content-Type": "multipart/form-data", 
+          },
+        }
       );
       setUploading(false);
-      setPhoto_url(response.data.secure_url);
-      console.log("Image uploaded: ", response.data.secure_url);
-      return response.data.secure_url;
+      setPhoto_url(response.data.url);
+      console.log("Image uploaded: ", response.data.url);
+      return response.data.url;
     } catch (error) {
       setUploading(false);
       console.error("Error uploading image: ", error);
@@ -81,13 +87,17 @@ const UploadSpotPage: React.FC = () => {
 
   const sendPostDataToServer = async (uploadedImageUrl: string) => {
     try {
-      await axios.post(`${baseUrl}/posts/new`, {
+      await axios.post(`${baseUrl}/posts/create`, {
         user_id,
         spot_name,
         location,
         description,
         fish_type,
-        photo_url: uploadedImageUrl,
+        image: uploadedImageUrl,
+      },{
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`, 
+        }
       });
       alert("Spot uploaded successfully!");
     } catch (error) {

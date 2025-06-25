@@ -15,28 +15,32 @@ const EditProfilePage: React.FC = () => {
   const [uploading, setUploading] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false); // New loading state
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const user_id = localStorage.getItem("user_id");
+  const token = localStorage.getItem("token");
 
   const navigate = useNavigate();
 
-  if (!user_id) {
+  if (!token) {
     console.error("User ID not found in localStorage");
-    return null; // Early return to avoid further execution
+    return null; 
   }
 
   // Fetch user's profile when the page loads
   const fetchUserProfile = async () => {
     try {
       const response = await axios.get(
-        `${baseUrl}/users/${user_id}`
+        `${baseUrl}/users/profile`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       const data = response.data;
-      console.log(data); // Check if data is being fetched correctly
+      console.log(data);
 
-      // Set default values for each field after fetching the user data
-      setName(data.nick_name || ""); // Ensure it's not null or undefined
+      setName(data.nick_name || ""); 
       setLocation(data.location || "");
       setBio(data.bio || "");
+      setAvatar(data.avatar || "");
     } catch (error) {
       console.log(error);
     }
@@ -61,25 +65,31 @@ const EditProfilePage: React.FC = () => {
 };
 
 
-  // Send picture to Cloudinary
   const uploadImgToCloudinary = async (): Promise<string | null> => {
     if (!inputFile) {
       alert("Please select a file to upload!");
       return null;
     }
     const formData = new FormData();
-    formData.append("file", inputFile);
-    formData.append("upload_preset", "yxk5zsh4");
+    formData.append("image", inputFile); 
+    formData.append("folder", "user avatar"); 
+
     try {
       setUploading(true);
       const response = await axios.post(
-        "https://api.cloudinary.com/v1_1/dstq5xce2/image/upload",
-        formData
+        `${baseUrl}/cloudinary/upload`, 
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, 
+            "Content-Type": "multipart/form-data", 
+          },
+        }
       );
       setUploading(false);
-      setAvatar(response.data.secure_url); // Save the image URL
-      console.log("Image uploaded: ", response.data.secure_url);
-      return response.data.secure_url; // Return the URL after successful upload
+      setAvatar(response.data.url); 
+      console.log("Image uploaded: ", response.data.url);
+      return response.data.url; 
     } catch (error) {
       setUploading(false);
       console.error("Error uploading image: ", error);
@@ -87,16 +97,22 @@ const EditProfilePage: React.FC = () => {
     }
   };
 
-  // Send data to server when button clicked
+
   const updateUserProfile = async (avatarUrl: string | null) => {
     try {
+      const finalPhotoUrl = avatarUrl || avatar;
       const response = await axios.put(
-        `${baseUrl}/users/edit/${user_id}`,
+        `${baseUrl}/users/edit`,
         {
           nick_name: nick_name,
           location: location,
           bio: bio,
-          avatar: avatarUrl || avatar, // Use the newly uploaded avatar URL, or fallback to existing avatar
+          avatar: finalPhotoUrl, 
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
       console.log("Profile updated:", response.data);
@@ -105,30 +121,28 @@ const EditProfilePage: React.FC = () => {
     }
   };
 
-  // Handler functions
+
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true); // Set loading state to true when form submission starts
+    setIsLoading(true); 
 
     try {
       let uploadImg: string | null = null;
 
-      // Check if the user selected a file to upload
       if (inputFile) {
         uploadImg = await uploadImgToCloudinary();
       }
 
-      // Proceed to update the profile if the image is uploaded successfully, or if no new image is uploaded
+      
       if (!inputFile || uploadImg) {
-        await updateUserProfile(uploadImg); // Pass the image URL (if uploaded) to the profile update
+        await updateUserProfile(uploadImg); 
       }
 
-      // Navigate to the profile page or give success feedback
       navigate("/profile");
     } catch (error) {
       console.error("Error saving profile:", error);
     } finally {
-      setIsLoading(false); // Reset loading state after submission completes
+      setIsLoading(false); 
     }
   };
 
@@ -141,10 +155,10 @@ const EditProfilePage: React.FC = () => {
           <input
             id="name"
             type="text"
-            value={nick_name} // Ensure the value is set
+            value={nick_name}
             onChange={(e) => setName(e.target.value)}
             className={styles.input}
-            disabled={isLoading} // Disable input when loading
+            disabled={isLoading} 
           />
         </div>
         <div className={styles.formGroup}>
@@ -152,20 +166,20 @@ const EditProfilePage: React.FC = () => {
           <input
             id="location"
             type="text"
-            value={location} // Ensure the value is set
+            value={location}
             onChange={(e) => setLocation(e.target.value)}
             className={styles.input}
-            disabled={isLoading} // Disable input when loading
+            disabled={isLoading} 
           />
         </div>
         <div className={styles.formGroup}>
           <label htmlFor="bio">Bio</label>
           <textarea
             id="bio"
-            value={bio} // Ensure the value is set
+            value={bio} 
             onChange={(e) => setBio(e.target.value)}
             className={styles.textarea}
-            disabled={isLoading} // Disable textarea when loading
+            disabled={isLoading}
           />
         </div>
         <div>
@@ -178,7 +192,7 @@ const EditProfilePage: React.FC = () => {
               onChange={handleFileChange}
               className={styles["hidden-file-input"]}
               id="uploadImages"
-              disabled={isLoading} // Disable file input when loading
+              disabled={isLoading} 
             />
             <label htmlFor="uploadImages" className="cursor-pointer">
               Select Image
@@ -194,7 +208,7 @@ const EditProfilePage: React.FC = () => {
           <button
             type="submit"
             className={styles.saveBtn}
-            disabled={isLoading} // Disable save button when loading
+            disabled={isLoading}
           >
             {isLoading ? "Saving..." : "Save Changes"}
           </button>
@@ -202,7 +216,7 @@ const EditProfilePage: React.FC = () => {
             type="button"
             className={styles.cancelBtn}
             onClick={() => console.log("Cancelled")}
-            disabled={isLoading} // Disable cancel button when loading
+            disabled={isLoading} 
           >
             Cancel
           </button>
