@@ -26,8 +26,11 @@ jobs:
       - name: Install deps
         run: npm ci   # uses package-lock.json in FishingWeb/
 
-      - name: Build (Vite)
-        run: npm run build   # creates FishingWeb/dist
+      - name: Build with env
+        env:
+          VITE_BASE_URL: ${{ secrets.VITE_BASE_URL }}
+          NODE_ENV: production
+        run: npm run build
 
       - name: Configure AWS creds
         uses: aws-actions/configure-aws-credentials@v4
