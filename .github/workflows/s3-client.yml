@@ -1,24 +1,45 @@
-name: Deploy Client to S3
-on: { push: { branches: [main] } }
+name: Deploy Client (FishingWeb) to S3
+on:
+  push:
+    branches: [ main ]
+
+# Run all shell steps from the subfolder
 defaults:
   run:
-    working-directory: FishingWeb   # <- change if your frontend path is different
+    working-directory: FishingWeb
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with: { node-version: 20, cache: 'npm', cache-dependency-path: 'client/package-lock.json' }
-      - run: npm ci               # or `npm install` if you don't commit lockfile
-      - run: npm run build
-      - uses: aws-actions/configure-aws-credentials@v4
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          # IMPORTANT: path is relative to REPO ROOT, not working-directory
+          cache-dependency-path: FishingWeb/package-lock.json
+
+      - name: Install deps
+        run: npm ci   # uses package-lock.json in FishingWeb/
+
+      - name: Build (Vite)
+        run: npm run build   # creates FishingWeb/dist
+
+      - name: Configure AWS creds
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: eu-north-1
-      - run: |
-          aws s3 sync dist/ s3://YOUR_BUCKET --delete --cache-control "public,max-age=31536000,immutable" --exclude "index.html" || \
-          aws s3 sync build/ s3://YOUR_BUCKET --delete --cache-control "public,max-age=31536000,immutable" --exclude "index.html"
-          aws s3 cp dist/index.html s3://YOUR_BUCKET/index.html --cache-control "no-cache" || \
-          aws s3 cp build/index.html s3://YOUR_BUCKET/index.html --cache-control "no-cache"
+          aws-region: eu-north-1   # change if needed
+
+      - name: Deploy to S3 (cache everything except index.html)
+        run: |
+          aws s3 sync dist/ s3://fishing-spot-bucket --delete \
+            --cache-control "public,max-age=31536000,immutable" \
+            --exclude "index.html"
+          aws s3 cp dist/index.html s3://fishing-spot-bucket/index.html \
+            --cache-control "no-cache"
